@@ -11,16 +11,16 @@ class Testpage extends Component {
       // Need to replace tableTitle with index
       tableTitle: ['19/11/19', '19/11/19', '19/11/19', '19/11/19', '19/11/19', '19/11/19', '19/11/19', '19/11/19'],
       //////////////////
-      tableData: [
-        ['PDC-ACC', '500.0', '0.0'],
-        ['BANK-ACC', '250.0', '0.0'],
-        ['CASH-ACC', '150.0', '500.0'],
-        ['CASH-ACC', '15.0', '50.0'],
-        ['BANK-ACC', '250.0', '0.0'],
-        ['PDC-ACC', '500.0', '0.0'],
-        ['CASH-ACC', '150.0', '500.0'],
-        ['BANK-ACC', '250.0', '0.0']
-      ],
+      // tableData: [
+      //   ['PDC-ACC', '500.0', '0.0'],
+      //   ['BANK-ACC', '250.0', '0.0'],
+      //   ['CASH-ACC', '150.0', '500.0'],
+      //   ['CASH-ACC', '15.0', '50.0'],
+      //   ['BANK-ACC', '250.0', '0.0'],
+      //   ['PDC-ACC', '500.0', '0.0'],
+      //   ['CASH-ACC', '150.0', '500.0'],
+      //   ['BANK-ACC', '250.0', '0.0']
+      // ],
       isLoading: true,
       newTable: [],
       dataSource: []
@@ -41,6 +41,7 @@ class Testpage extends Component {
             //flexArr={[1, 1, 1]}
             style={styles.head}
             textStyle={styles.text} />
+          
 
        { jsonData.map((e, index)=>{
           let workOrder1=Object.values(e)

@@ -34,6 +34,10 @@ class TablePage extends Component {
   render() {
   
     const state = this.state;
+    const cleanData = jsonData.map((d) => {
+      const { id, ...rest} = d
+      return rest;
+    })
     return (
       <View style={styles.container}>
         <Table style={styles.tableStyle} borderStyle={{ borderWidth: .3 }}>
@@ -42,9 +46,9 @@ class TablePage extends Component {
             style={styles.head}
             textStyle={styles.text} />
 
-       { jsonData.map((e, index)=>{
+       { cleanData.map((e, index)=>{
           let workOrder1=Object.values(e)
-          workOrder1.shift();
+         // workOrder1.shift();
           //console.log('data ', data)
         return(
           <Row

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View,Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import colors from '../config/colors';
 
 
 
@@ -25,7 +26,7 @@ export default Header;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#092d5f',
+        backgroundColor: colors.HEADER_BLUE,
         width: "100%",
         flexDirection: 'row',
         height: 60,

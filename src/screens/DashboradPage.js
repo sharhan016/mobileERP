@@ -4,10 +4,11 @@ import Button from '../components/Button';
 import Card from '../components/Card';
 import CardSection from '../components/CardSection';
 import RoundNav from '../components/RoundNav';
+import Info from '../components/Info';
 import Report from '../components/Report';
 import Header from '../components/Header';
 import colors from '../config/colors';
-import Pie from '../screens2/pie2';
+import PieJS from './PieJS';
 
 
 
@@ -34,6 +35,7 @@ class DashboardPage extends Component {
                             <RoundNav onPress={this.openReport} iconName='activity' heading='Analytics' iconStyle={{ backgroundColor: '#c9dcfc', borderColor: '#4f91ff' }} />
                             <RoundNav iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
                             <RoundNav iconName='clipboard' heading='Orders' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
+
                         </View>
 
                         <View style={styles.topNav}>
@@ -45,35 +47,20 @@ class DashboardPage extends Component {
                     <View style={{ marginLeft: 5, marginRight: 5, borderWidth: StyleSheet.hairlineWidth, height: 1, borderColor: 'gray' }}></View>
 
                     <View style={{ height: 130, flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <View style={styles.singleItem}>
-                            <Text style={styles.headingText}>{'\t'}Cash {'\n'} Inhand</Text>
-                            <Text style={styles.valueText}> $32,375</Text>
-                        </View>
 
-                        <View style={styles.singleItem}>
-                            <Text style={styles.headingText}>{'\t'}Bank {'\n'} Balance</Text>
-                            <Text style={styles.valueText}> $20,595</Text>
-                        </View>
-
-                        <View style={styles.singleItem}>
-                            <Text style={styles.headingText}>{'\t'}Not {'\n'}Settled</Text>
-                            <Text style={styles.valueText}> 12,321</Text>
-                        </View>
-
-                        <View style={styles.singleItem}>
-                            <Text style={styles.headingText}>{'\t'}Total {'\n'} Payable</Text>
-                            <Text style={styles.valueText}> 12,321</Text>
-                        </View>
+                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
+                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
+                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
+                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
 
                     </View>
 
                     <View style={{ marginLeft: 5, marginRight: 5, borderWidth: StyleSheet.hairlineWidth, height: 1, borderColor: 'gray' }}></View>
                     <View style={styles.reportView}>
                         <Report />
+                        <Card><PieJS /></Card>
                         <View style={{height: 10}}></View>
                         {/* <Pie data='This is the data passed' /> */} 
-
-
                     </View>
 
                 </ScrollView>
@@ -85,7 +72,7 @@ export default DashboardPage;
 
 const styles = StyleSheet.create({
     container: {
-        //backgroundColor: colors.WHITISH,
+        backgroundColor: colors.WHITISH,
         flex: 1
     },
     madding: {
@@ -163,18 +150,11 @@ const styles = StyleSheet.create({
         padding: 10,
         justifyContent: 'space-evenly'
     },
-    headingText: {
-        fontSize: 18,
-        color: 'gray'
-    },
-    valueText: {
-        fontSize: 17,
-        color: '#3168cc',
-        fontWeight: '700'
-    },
     reportView: {
-        margin: 10,
-        padding: 5
+        marginRight: 2,
+        marginLeft: 2,
+        //margin: 10,
+        //padding: 5
     },
     headerContainer: {
         backgroundColor: '#092d5f',

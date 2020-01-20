@@ -4,6 +4,7 @@ import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RadioForm from 'react-native-simple-radio-button';
 import colors from '../config/colors';
+import Header from '../components/Header';
 
 let radio_props = [
     { label: 'Day        ', value: 0 },
@@ -85,6 +86,7 @@ class ReportPage extends Component {
             </View>
         return (
             <View style={styles.container}>
+                <Header heading='Analytics' onPress={ () => this.props.navigation.openDrawer()} />
                 <View style={styles.radioField}>
                     <RadioForm
                         radio_props={radio_props}
