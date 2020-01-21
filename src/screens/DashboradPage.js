@@ -9,7 +9,8 @@ import Report from '../components/Report';
 import Header from '../components/Header';
 import colors from '../config/colors';
 import PieJS from './PieJS';
-
+import Line from '../components/LineChart';
+import Fusion from '../components/FushionChart';
 
 
 class DashboardPage extends Component {
@@ -59,8 +60,9 @@ class DashboardPage extends Component {
                     <View style={styles.reportView}>
                         <Report />
                         <Card><PieJS /></Card>
-                        <View style={{height: 10}}></View>
-                        {/* <Pie data='This is the data passed' /> */} 
+                        <View style={{height: 10}}></View> 
+                        <Line />
+                        <Fusion />
                     </View>
 
                 </ScrollView>
