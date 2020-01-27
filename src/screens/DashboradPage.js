@@ -9,8 +9,9 @@ import Report from '../components/Report';
 import Header from '../components/Header';
 import colors from '../config/colors';
 import PieJS from './PieJS';
-import Line from '../components/LineChart';
-import Fusion from '../components/FushionChart';
+import Line from '../components/Line';
+import LineCT from '../components/LineChart';
+import Spacer from '../components/Spacer';
 
 
 class DashboardPage extends Component {
@@ -36,33 +37,29 @@ class DashboardPage extends Component {
                             <RoundNav onPress={this.openReport} iconName='activity' heading='Analytics' iconStyle={{ backgroundColor: '#c9dcfc', borderColor: '#4f91ff' }} />
                             <RoundNav iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
                             <RoundNav iconName='clipboard' heading='Orders' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
-
                         </View>
-
                         <View style={styles.topNav}>
                             <RoundNav iconName='activity' heading='Tasks' iconStyle={{ backgroundColor: '#d5e8d5', borderColor: '#aecbaa' }} />
                             <RoundNav iconName='activity' heading='Sales' iconStyle={{ backgroundColor: '#f9f1cd', borderColor: '#e4d594' }} />
                             <RoundNav iconName='activity' heading='Products' iconStyle={{ backgroundColor: '#f0c8b4', borderColor: '#b2856d' }} />
                         </View>
                     </View>
-                    <View style={{ marginLeft: 5, marginRight: 5, borderWidth: StyleSheet.hairlineWidth, height: 1, borderColor: 'gray' }}></View>
 
+                    <Line />
                     <View style={{ height: 130, flexDirection: 'row', justifyContent: 'space-around' }}>
-
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
-
                     </View>
+                    <Line />
 
-                    <View style={{ marginLeft: 5, marginRight: 5, borderWidth: StyleSheet.hairlineWidth, height: 1, borderColor: 'gray' }}></View>
                     <View style={styles.reportView}>
                         <Report />
                         <Card><PieJS /></Card>
-                        <View style={{height: 10}}></View> 
-                        <Line />
-                        <Fusion />
+                        <View style={{ height: 10 }}></View>
+                        <LineCT />
+
                     </View>
 
                 </ScrollView>

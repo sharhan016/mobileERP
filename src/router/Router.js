@@ -6,6 +6,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import Feather from 'react-native-vector-icons/Feather';
 import LoginPage from '../screens/LoginPage';
+import AliasPage from '../screens/AliasPage';
 import DashboardPage from '../screens/DashboradPage';
 import AuthScreen from '../screens/AuthScreen';
 import ReportPage from '../screens/ReportPage';
@@ -23,6 +24,7 @@ class Navigator extends Component {
 }
 
 const LoginStack = createStackNavigator({
+    Alias: AliasPage,
     SignIn: LoginPage,
     //SignUp: RegisterPage
 });

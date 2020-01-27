@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { LineChart } from 'react-native-chart-kit';
+import colors from "../config/colors";
 
 const chartConfig = {
     backgroundGradientFrom: "#1E2923",
@@ -11,17 +12,16 @@ const chartConfig = {
     strokeWidth: 2, // optional, default 3
     barPercentage: 0.5
 };
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get("window").width - 20;
 const data = {
-    labels: ["January", "February", "March", "April", "May", "June"],
+    labels: ["January", "February", "March", "April", "May", "June",],
     datasets: [
         {
-            data: [20, 45, 28, 80, 99, 43],
-            color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+            data: [20, 45, 28, 50,  80, 100, 43, 70, 45, 30, 50, 78],
+            color: (opacity = 1) => `rgba(43, 16, 87, ${opacity})`, // optional
             strokeWidth: 2 // optional
         }
     ],
-    legend: ["Rainy Days", "Sunny Days", "Snowy Days"] // optional
 };
 class LineChart2 extends Component {
 
@@ -32,7 +32,24 @@ class LineChart2 extends Component {
                     data={data}
                     width={screenWidth}
                     height={220}
-                    chartConfig={chartConfig}
+                    yAxisLabel={'$'}
+                    chartConfig={{
+                        backgroundColor: 'black',
+                        backgroundGradientFrom: '#e4e9f2',
+                        labelColor: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
+                        backgroundGradientTo: '#525050',
+                        decimalPlaces: 2, // optional, defaults to 2dp
+                        color: (opacity = 1) => `rgba(183, 208, 247, ${opacity})`, // color inisde line portion
+                        style: {
+                            borderRadius: 14,
+                            
+                        }
+                    }}
+                    bezier
+                    style={{
+                        marginVertical: 8,
+                        borderRadius: 10,
+                    }}
                 />
             </View>
         );

@@ -11,12 +11,13 @@ import * as api from '../config/api';
 
 
 const WIDTH = Dimensions.get('screen').width;
-class LoginPage extends Component {
+
+class AliasPage extends Component {
     static navigationOptions = {
         header: null
     }
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             showPass: true,
             loading: false,
@@ -26,11 +27,10 @@ class LoginPage extends Component {
             password: '',
             isUserLoggedIn: '1',
             topPadding: 80
-        }
+        };
         this.keyboardHeight = new Animated.Value(0);
-        this.imageHeight = new Animated.Value(120);
+        this.imageHeight = new Animated.Value(140);
     }
-
     componentDidMount() {
         this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
@@ -68,109 +68,120 @@ class LoginPage extends Component {
         this.keyboardDidShowSub.remove();
         this.keyboardDidHideSub.remove();
     }
-      getUserId = (id) => {
-        this.setState({ username: id })
+    
+    getAlias = (name) => {
+        this.setState({ alias: name })
     }
-    getPassword = (pass) => {
-        this.setState({ password: pass })
-    }
-    showPass = () => {
-        if (this.state.press == false) {
-            this.setState({ showPass: false, press: true })
-        } else {
-            this.setState({ showPass: true, press: false })
+  
+    checkAlias = async () => {
+        const { alias } = this.state;
+        console.log('inside getAlias')
+        if(alias.length < 4){
+            return alert('Please Enter valid Alias');
         }
+        await axios.post(api.USER_LOGIN, {
+            "Alias": alias
+        })
+       .then(response => {
+           console.log('In response',response)
+       })
+       .catch(error => console.log('In catch BLOCK Error:',error))
+       this.props.navigation.navigate("SignIn");
     }
-
     loginButton = () => {
-        const { username, password } = this.state;
+        const { username, password, alias } = this.state;
         console.log('In Login Btn')
         if (this.state.username != '') {
             if (this.state.password != '') {
-            } else { alert('Please Enter password'); }
+                //alert('Success')
+            } else {
+                alert('Please Enter password');
+            }
+            if (this.state.alias != '') {
+
+            } else {
+                alert('Please Enter Alias')
+            }
         } else {
             alert('Please Enter UserName');
+
         }
         this.setState({ loading: true });
         Keyboard.dismiss();
-        console.log('Username and Password',username,password)
-        //this.props.navigation.navigate('Dashboard')
-        //this.submit(username, password);
+        this.props.navigation.navigate('Dashboard')
+        //this.submit(username, password, alias);
     }
 
-    // submit = async (user, pass) => {
-    //     //const { user, pass } = this.state;
-    //     //console.log('USERNAME AND PASSWORD', user, pass )
-    //     axios.post(api.USER_LOGIN, {
-    //         UserName: user,
-    //         UserPassword: pass,
-    //         Alias: alias
-    //     }).then(response => {
-    //         let userData = response.userData
-    //         const navigationParams = {
-    //             // if neeeded
-    //         }
-    //         let tok = response.data.APIToken;
-    //         let tokenID = tok.toString();
-    //         this.storeToken(tokenID, navigationParams)
-    //     })
-    //         .catch(error => {
-    //             ToastAndroid.show("Login Failed", ToastAndroid.SHORT);
-    //             this.setState({ loading: false });
-    //             console.log('Error: ', error)
-    //         })
-    // }
-    
+    submit = async (user, pass, alias) => {
+        //const { user, pass } = this.state;
+        //console.log('USERNAME AND PASSWORD', user, pass )
+        axios.post(api.USER_LOGIN, {
+            UserName: user,
+            UserPassword: pass,
+            Alias: alias
+        }).then(response => {
+            let userData = response.userData
+            const navigationParams = {
+                // if neeeded
+            }
+            let tok = response.data.APIToken;
+            let tokenID = tok.toString();
+            this.storeToken(tokenID, navigationParams)
+        })
+            .catch(error => {
+                ToastAndroid.show("Login Failed", ToastAndroid.SHORT);
+                this.setState({ loading: false });
+                console.log('Error: ', error)
+            })
+    }
 
+    storeToken = async (token, navData) => {
+        // const { userName, designation } = navData;
+        // console.log('username inside storeToken ',userName)
+        // try {
+        //     await AsyncStorage.setItem(api.TOKEN, data)
+        //     await AsyncStorage.setItem(api.USER_TYPE, type)
+        //     await AsyncStorage.setItem(api.LOGGED_IN, TRUE)
+        //     await AsyncStorage.setItem(api.USER_NAME,userName)
+        //     await AsyncStorage.setItem(api.USER_DESIGNATION, designation)
+        //     this.getToken();
+        // } catch (error) {
+        //     console.log(error)
+        // }
+        // this.setState({loading: false});
+        // this.props.navigation.navigate("Dashboard", navData);
+    }
     render() {
         return (
-                <Animated.View style={[styles.container, { paddingBottom: this.keyboardHeight }]} >
+            <Animated.View style={[styles.container, { paddingBottom: this.keyboardHeight }]} >
                 <StatusBar hidden={true} />
                 <View style={{ paddingVertical: this.state.topPadding }}></View>
                 <Animated.Image source={logo} style={[styles.logo, { height: this.imageHeight }]} />
-                <Spacer space={50} />
+                <Spacer space={60} />
 
                 <View>
-                    <Feather name={'user'} size={24} color={colors.LoginButton} style={styles.inputIcon} />
+                    <Feather name={'globe'} size={24} color={colors.LoginButton} style={styles.inputIcon} />
                     <TextInput
-                        onChangeText={this.getUserId}
-                        value={this.state.username}
+                        onChangeText={this.getAlias}
+                        value={this.state.alias}
                         style={styles.inputContainer}
-                        placeholder={'Username'}
+                        placeholder={'Alias'}
                         placeholderTextColor={colors.LoginButton}
                         underlineColorAndroid='transparent'
-                        keyboardType='email-address'
+                    //keyboardType='email-address'
                     //returnKeyType='go'
                     />
                 </View>
 
-                <Spacer space={15} />
-
-                <View>
-                    <Feather name={'lock'} size={24} color={colors.LoginButton} style={styles.inputIcon} />
-                    <TextInput
-                        style={styles.inputContainer}
-                        onChangeText={this.getPassword}
-                        value={this.state.password}
-                        placeholder={'Password'}
-                        placeholderTextColor={colors.LoginButton}
-                        underlineColorAndroid='transparent'
-                        secureTextEntry={this.state.showPass}
-                    />
-                    <TouchableOpacity style={styles.btnEye} onPress={this.showPass.bind(this)} >
-                        <Feather name={this.state.press == false ? 'eye' : 'eye-off'}
-                            size={20} color={colors.WHITISH} />
-                    </TouchableOpacity>
-                </View>
                 <Spacer space={20} />
-                <Button onPress={this.loginButton} label='Login' style={styles.buttonLogin} textStyle={{ fontSize: 15, fontWeight: '600', color: colors.WHITISH }} />
-              
-                </Animated.View>
-           
+
+                <Button onPress={this.checkAlias} label='Search' style={styles.buttonLogin} textStyle={{ fontSize: 15, fontWeight: '600', color: colors.WHITISH }} />
+
+            </Animated.View>
         );
     }
 }
-export default LoginPage;
+export default AliasPage;
 
 const styles = StyleSheet.create({
     container: {
@@ -194,8 +205,8 @@ const styles = StyleSheet.create({
         height: 120,
     },
     buttonLogin: {
-        width: WIDTH - 2*WIDTH /4,
-        borderRadius: 12,
+        width: WIDTH - 2*WIDTH /3.5,
+        borderRadius: 20,
         backgroundColor: colors.LoginButton
     },
     inputIcon: {
