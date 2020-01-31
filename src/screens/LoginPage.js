@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TextInput, ActivityIndicator, Dimensions, TouchableOpacity, ToastAndroid, Keyboard, Animated, ImageBackground, StatusBar } from "react-native";
+import { View, Text, StyleSheet, TextInput,Dimensions, TouchableOpacity, ToastAndroid, Keyboard, Animated, ImageBackground, StatusBar } from "react-native";
 import Button from '../components/Button';
 import Spacer from '../components/Spacer';
 import colors from '../config/colors';
@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
 
-
+const TRUE = 'true'
 const WIDTH = Dimensions.get('screen').width;
 class LoginPage extends Component {
     static navigationOptions = {
@@ -18,6 +18,7 @@ class LoginPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            comapanyID: this.props.navigation.getParam('ID'),
             showPass: true,
             loading: false,
             press: false,
@@ -32,6 +33,7 @@ class LoginPage extends Component {
     }
 
     componentDidMount() {
+        //console.log('This is the ID ',this.props.navigation.getParam('ID'))
         this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
         this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
     }
@@ -68,7 +70,7 @@ class LoginPage extends Component {
         this.keyboardDidShowSub.remove();
         this.keyboardDidHideSub.remove();
     }
-      getUserId = (id) => {
+    getUserId = (id) => {
         this.setState({ username: id })
     }
     getPassword = (pass) => {
@@ -83,7 +85,7 @@ class LoginPage extends Component {
     }
 
     loginButton = () => {
-        const { username, password } = this.state;
+        const { username, password, companyID } = this.state;
         console.log('In Login Btn')
         if (this.state.username != '') {
             if (this.state.password != '') {
@@ -93,43 +95,55 @@ class LoginPage extends Component {
         }
         this.setState({ loading: true });
         Keyboard.dismiss();
-        console.log('Username and Password',username,password)
         //this.props.navigation.navigate('Dashboard')
-        //this.submit(username, password);
+        this.submit(username, password);
     }
 
-    // submit = async (user, pass) => {
-    //     //const { user, pass } = this.state;
-    //     //console.log('USERNAME AND PASSWORD', user, pass )
-    //     axios.post(api.USER_LOGIN, {
-    //         UserName: user,
-    //         UserPassword: pass,
-    //         Alias: alias
-    //     }).then(response => {
-    //         let userData = response.userData
-    //         const navigationParams = {
-    //             // if neeeded
-    //         }
-    //         let tok = response.data.APIToken;
-    //         let tokenID = tok.toString();
-    //         this.storeToken(tokenID, navigationParams)
-    //     })
-    //         .catch(error => {
-    //             ToastAndroid.show("Login Failed", ToastAndroid.SHORT);
-    //             this.setState({ loading: false });
-    //             console.log('Error: ', error)
-    //         })
-    // }
-    
+    submit = async (user, pass) => {
+        let ali = 'ap_aldabbousdb' // #TODO:add this section dynamically
+        let id = this.props.navigation.getParam('ID')
+        let post = {
+            CompanyID: id,
+            username: 'aldabbousautoparts@gmail.com',
+            password: 'admin123#dabbous'
+        }
+        const headers = {
+            'alias': ali
+        }
+        axios.post(api.USER_LOGIN, post, {
+            headers: headers
+        }).then(response => {
+            let data = response.data.requestedData
+            const userData = data["userData"]
+            const token = data.authToken
+
+            this.storeToken(userData, token)
+        }).catch(error => {
+            ToastAndroid.show("Login Failed", ToastAndroid.SHORT);
+            this.setState({ loading: false });
+            console.log('Error: ', error)
+        })
+    }
+    storeToken = async (data, token) => {
+        try {
+            await AsyncStorage.setItem(api.TOKEN, token)
+            await AsyncStorage.setItem(api.USER_DATA, JSON.stringify(data))
+            await AsyncStorage.setItem(api.LOGGED_IN, TRUE )
+        } catch (error) {
+            console.log('Error inside localStorage',error)
+        }
+        this.props.navigation.navigate("Dashboard")
+    }
+
 
     render() {
         return (
-                <Animated.View style={[styles.container, { paddingBottom: this.keyboardHeight }]} >
+            <Animated.View style={[styles.container, { paddingBottom: this.keyboardHeight }]} >
                 <StatusBar hidden={true} />
                 <View style={{ paddingVertical: this.state.topPadding }}></View>
                 <Animated.Image source={logo} style={[styles.logo, { height: this.imageHeight }]} />
                 <Spacer space={50} />
-
+                {/* <Text>Company ID:{this.props.navigation.getParam("ID")} </Text> */}
                 <View>
                     <Feather name={'user'} size={24} color={colors.LoginButton} style={styles.inputIcon} />
                     <TextInput
@@ -164,9 +178,9 @@ class LoginPage extends Component {
                 </View>
                 <Spacer space={20} />
                 <Button onPress={this.loginButton} label='Login' style={styles.buttonLogin} textStyle={{ fontSize: 15, fontWeight: '600', color: colors.WHITISH }} />
-              
-                </Animated.View>
-           
+
+            </Animated.View>
+
         );
     }
 }
@@ -194,7 +208,7 @@ const styles = StyleSheet.create({
         height: 120,
     },
     buttonLogin: {
-        width: WIDTH - 2*WIDTH /4,
+        width: WIDTH - 2 * WIDTH / 4,
         borderRadius: 12,
         backgroundColor: colors.LoginButton
     },

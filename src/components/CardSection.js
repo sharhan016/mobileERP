@@ -13,7 +13,7 @@ const styles= StyleSheet.create({
         borderBottomWidth: 1,
         padding: 5,
         backgroundColor: '#FFF',
-        justifyContent: 'flex-start',
+        //justifyContent: 'flex-start',
         flexDirection: 'row',
         borderColor: '#ddd',
         position: 'relative',

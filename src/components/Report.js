@@ -11,8 +11,7 @@ const WIDTH = Dimensions.get('screen').width;
 class Report extends Component {
     render() {
         return (
-            <View style={styles.container}>
-
+            <View style={styles.container}>                
                 <Card>
                     <CardSection >
                         <View style={styles.cardHeading}><Text style={styles.headingTextStyle}>Revenues</Text></View>

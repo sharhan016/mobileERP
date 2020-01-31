@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, ActivityIndicator, Dimensions, TouchableOpacity, ToastAndroid, Keyboard, Animated, ImageBackground, StatusBar } from "react-native";
 import Button from '../components/Button';
 import Spacer from '../components/Spacer';
+import Indicator from '../components/Indicator';
 import colors from '../config/colors';
 import logo from '../assets/images/ranam-logo.png';
 import Feather from 'react-native-vector-icons/Feather';
@@ -68,25 +69,60 @@ class AliasPage extends Component {
         this.keyboardDidShowSub.remove();
         this.keyboardDidHideSub.remove();
     }
-    
+
     getAlias = (name) => {
         this.setState({ alias: name })
     }
-  
+
+    searchAlias = async () => {
+        let ali = 'ap_lagnuvodb'
+            fetch(api.USER_LOGIN, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Alias': ali
+            }
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+        console.log(responseJson) ;
+        })
+    .catch((error) => {
+      console.error(error);
+    });
+
+    }
+
     checkAlias = async () => {
         const { alias } = this.state;
-        console.log('inside getAlias')
+        let ali = 'ap_aldabbousdb'
         if(alias.length < 4){
             return alert('Please Enter valid Alias');
+        }   
+        this.searchAlias(ali)
+    }
+    searchAlias = async (alias) => {
+        let mycompanies = []
+        const headers = {
+            'alias': alias
         }
-        await axios.post(api.USER_LOGIN, {
-            "Alias": alias
-        })
-       .then(response => {
-           console.log('In response',response)
-       })
-       .catch(error => console.log('In catch BLOCK Error:',error))
-       this.props.navigation.navigate("SignIn");
+        this.setState({loading: true})
+            await axios.post(api.GET_COMPANIES, {}, { headers: headers})
+           .then(response => {
+            mycompanies = response.data.requestedData["myCompanies"];
+            let companyId = mycompanies[0]["CompanyID"];
+            if(mycompanies.length == 0){
+                this.props.navigation.navigate("SignIn",{ companyID: companyId});
+            }
+            else{
+                this.props.navigation.navigate('Companies', {navigationData: mycompanies})
+            }
+            this.setState({loading: false})
+           })
+           .catch(error => {
+            this.setState({loading: false})
+            console.log('In catch BLOCK Error:',error)})
     }
     loginButton = () => {
         const { username, password, alias } = this.state;
@@ -174,9 +210,9 @@ class AliasPage extends Component {
                 </View>
 
                 <Spacer space={20} />
-
-                <Button onPress={this.checkAlias} label='Search' style={styles.buttonLogin} textStyle={{ fontSize: 15, fontWeight: '600', color: colors.WHITISH }} />
-
+                <View>
+                {this.state.loading ? <Indicator loading={this.state.loading} /> : <Button onPress={this.checkAlias} label='Search' style={styles.buttonLogin} textStyle={styles.textStyle} />}
+                </View>
             </Animated.View>
         );
     }
@@ -205,7 +241,7 @@ const styles = StyleSheet.create({
         height: 120,
     },
     buttonLogin: {
-        width: WIDTH - 2*WIDTH /3.5,
+        width: WIDTH - 2 * WIDTH / 3.5,
         borderRadius: 20,
         backgroundColor: colors.LoginButton
     },
@@ -220,5 +256,16 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 9,
         right: 40,
+    },
+    textStyle: {
+         fontSize: 15, fontWeight: '600', color: colors.WHITISH 
+    },
+    btnLogin: {
+        width: WIDTH - 95,
+        height: 40,
+        borderRadius: 25,
+        backgroundColor: colors.HEADER_BLUE,
+        justifyContent: 'center',
+        marginTop: 20,
     },
 });

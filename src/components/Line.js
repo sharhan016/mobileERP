@@ -1,6 +1,7 @@
 import React from "react";
 import { 
-    View
+    View,
+    StyleSheet
 } from "react-native";
 
 const Line = (props) => (
