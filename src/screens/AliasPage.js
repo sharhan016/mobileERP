@@ -79,9 +79,7 @@ class AliasPage extends Component {
             fetch(api.USER_LOGIN, {
             method: 'POST',
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Alias': ali
+                'alias': ali
             }
         })
         .then((response) => response.json())
@@ -96,7 +94,7 @@ class AliasPage extends Component {
 
     checkAlias = async () => {
         const { alias } = this.state;
-        let ali = 'ap_aldabbousdb'
+        let ali = 'ap_aldabbousdb' //#TODO: change this 
         if(alias.length < 4){
             return alert('Please Enter valid Alias');
         }   
@@ -110,10 +108,13 @@ class AliasPage extends Component {
         this.setState({loading: true})
             await axios.post(api.GET_COMPANIES, {}, { headers: headers})
            .then(response => {
+               console.log(response)
             mycompanies = response.data.requestedData["myCompanies"];
+            console.log('length',mycompanies.length)
             let companyId = mycompanies[0]["CompanyID"];
-            if(mycompanies.length == 0){
-                this.props.navigation.navigate("SignIn",{ companyID: companyId});
+            console.log('companyId',companyId)
+            if(mycompanies.length == 1){
+                this.props.navigation.navigate("SignIn",{ ID: companyId});
             }
             else{
                 this.props.navigation.navigate('Companies', {navigationData: mycompanies})

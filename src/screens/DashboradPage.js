@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from "axios";
+import * as api from '../config/api';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import CardSection from '../components/CardSection';
@@ -12,10 +15,30 @@ import PieJS from './PieJS';
 import Line from '../components/Line';
 import LineCT from '../components/LineChart';
 import Spacer from '../components/Spacer';
-
+import Expandable from '../screens/ExpandablePage'; 
+import Expand2 from '../components/ExpandableComp2';
+import Expand3 from '../components/ExpandableComp3';
+import Expand4 from '../components/ExpandableComp4';
 
 class DashboardPage extends Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            tokenID: '',
+            CashOnBank : '',
+            CashOnHand : '',
+            CashPayable : '',
+            CashReceivable : '',
+            SalesIncome: [],
+           // OtherRevenue: [],
+            loaded: false,
+            loaded2: false
+        }
+    }
+    componentDidMount(){
+        this.getToken()
+    }
     static navigationOptions = {
         header: null
     }
@@ -23,10 +46,93 @@ class DashboardPage extends Component {
         console.log('Ene thottu')
         this.props.navigation.navigate('Report')
     }
+    getToken = async () => {
+        try {
+            let token = await AsyncStorage.getItem(api.TOKEN);
+            let data = await AsyncStorage.getItem(api.USER_DATA);
+            var object = JSON.parse(data)
+            this.setState({tokenID: token})
+            console.log('this is in state',this.state.tokenID)
+            //this.getCurrentMoneyStatus()
+            this.getDashboardData()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    getCurrentMoneyStatus = async () => {
+        let alias = 'ap_lagnuvodb' //TODO: change it later
+        let post = {
+            "alias" : alias,
+            "authorization" : this.state.tokenID,
+        }
+        console.log('This is post ',post)
+        try {
+            await axios.post(api.GET_CASH_VALUES, {} , {headers: post} )
+            .then(response => {
+                console.log('Response Got',response.data.requestedData)
+                let res = response.data.requestedData
+                let cashOnBank = res.bankAccountBlock.CashOnBankAmount
+                let cashOnHand = res.cashAccountBlock.CashOnHandAmount
+                let cashPayable = res.payableBlock.PayableAmount
+                let cashReceivable = res.receivableBlock.ReceivableAmount
+                this.setState({
+                    CashOnBank: cashOnBank,
+                    CashOnHand: cashOnHand,
+                    CashPayable: cashPayable,
+                    CashReceivable: cashReceivable,
+                    loaded: true
+                })
+                console.log(this.state)
+            })
+            .catch(error => console.log(error))
+        } catch (error) {
+            console.log('inside catch block',error)
+        }
+    }
+    getDashboardData = async () => {
+        let ali = 'ap_aldabbousdb' //TODO: change it
+        let post = {
+            "alias" : ali,
+            "authorization" : this.state.tokenID,
+        }
+        try {
+            await axios.post(api.GET_DASHBOARD_DATA, {} , {headers: post} )
+            .then( res => {
+                //console.log('Response Got',response.data.requestedData)
+                let response = res.data.requestedData
+                console.log(response)
+                let salesIncome = response.salesIncomes
+                let otherRevenue = response.otherIncomes
+                let customerReceipt = response.customerReciepts
+                let otherReceipt = response.otherReciepts
+                let purchaseExpense = response.purchaseExpenses
+                let otherExpense = response.otherExpenses
+                let supplierPayment = response.supplierPayments
+                let otherPayment = response.otherPayments
+                console.log('this is sales',salesIncome)
+                //TODO: add similiar fields
+                this.setState({
+                    SalesIncome: salesIncome, 
+                    OtherRevenue: otherRevenue, 
+                    CustomerReceipt: customerReceipt,
+                    OtherReceipt: otherReceipt,
+                    PurchaseExpense: purchaseExpense,
+                    OtherExpense: otherExpense,
+                    SupplierPayment: supplierPayment,
+                    OtherPayment: otherPayment,
+                    loaded2: true})
+            })
+        } catch (error) {
+            console.log(error)
+        }
+        console.log(this.state.SalesIncome)
+
+
+    }
 
     render() {
+        console.log('In Render',this.state)
         return (
-
             <View style={styles.container}>
                 <Header heading='Dashboard' onPress={() => this.props.navigation.openDrawer()} />
 
@@ -45,7 +151,14 @@ class DashboardPage extends Component {
                         </View>
                     </View>
 
-                    <Line />
+                    {this.state.loaded2 ? <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} /> : null }
+
+                    {this.state.loaded2 ? <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt}  /> : null }
+
+                    {this.state.loaded2 ? <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} /> : null }
+
+                    {this.state.loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null }
+                    {/* <Line />
                     <View style={{ height: 130, flexDirection: 'row', justifyContent: 'space-around' }}>
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
@@ -60,7 +173,7 @@ class DashboardPage extends Component {
                         <View style={{ height: 10 }}></View>
                         <LineCT />
 
-                    </View>
+                    </View> */}
 
                 </ScrollView>
             </View>

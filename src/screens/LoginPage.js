@@ -114,6 +114,7 @@ class LoginPage extends Component {
             headers: headers
         }).then(response => {
             let data = response.data.requestedData
+            console.log('data',response)
             const userData = data["userData"]
             const token = data.authToken
 
