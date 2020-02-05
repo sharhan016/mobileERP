@@ -77,7 +77,30 @@
                 "CreditSum": "40.000"
             }
         ],
-        "purchaseExpenses": [],
+        "purchaseExpenses": [
+            {
+                "TransType": "PUR",
+                "TransCode": "PUR1",
+                "TransFullName": "Purchase  Invoice",
+                "NoOfTrans": "24",
+                "TotalItems": "9766.000",
+                "TotalAmount": "11014.27400",
+                "TotalTax": "0.00000",
+                "TotalCessAmount": "0.00000",
+                "TotalDiscount": "0.00000",
+                "OtherCharges": "0.00000",
+                "GrandTotal": "11014.27400",
+                "BillDiscount": "0.28000",
+                "BillOC": "0.00000",
+                "Roundings": "-0.00400",
+                "PayableAmount": "11013.99000",
+                "AdvanceAmount": "4968.25000",
+                "BalanceAmount": "6045.74000",
+                "TotalLaterDiscount": "0.00000",
+                "TotalCurrentBalance": "6015.74000",
+                "TotalLaterPaidAmount": "30.00000"
+            }
+        ],
         "otherExpenses": [
             {
                 "RowsCNT": "7",
@@ -88,28 +111,21 @@
         ],
         "customerReciepts": [
             {
-                "VoucherType": "CP",
-                "OB": "0.000",
+                "VoucherType": "CR",
+                "OB": "100.000",
                 "TransCnt": "0",
                 "DebitSum": "0.000",
-                "CreditSum": "0.000"
+                "CreditSum": "20.000"
             },
             {
                 "VoucherType": "CR",
-                "OB": "0.000",
+                "OB": "50.000",
                 "TransCnt": "0",
                 "DebitSum": "0.000",
-                "CreditSum": "0.000"
+                "CreditSum": "30.000"
             },
             {
                 "VoucherType": "BD",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "CR",
                 "OB": "0.000",
                 "TransCnt": "0",
                 "DebitSum": "0.000",
@@ -133,28 +149,14 @@
             },
             {
                 "VoucherType": "CR",
-                "OB": "0.000",
+                "OB": "10.000",
                 "TransCnt": "0",
                 "DebitSum": "0.000",
                 "CreditSum": "0.000"
             },
             {
                 "VoucherType": "BD",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "QR",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "BD",
-                "OB": "0.000",
+                "OB": "50.000",
                 "TransCnt": "0",
                 "DebitSum": "0.000",
                 "CreditSum": "0.000"
@@ -163,55 +165,34 @@
         "supplierPayments": [
             {
                 "VoucherType": "CP",
+                "OB": "10.000",
+                "TransCnt": "0",
+                "DebitSum": "0.000",
+                "CreditSum": "0.000"
+            },
+            {
+                "VoucherType": "BW",
+                "OB": "20.000",
+                "TransCnt": "0",
+                "DebitSum": "0.000",
+                "CreditSum": "0.000"
+            },
+            {
+                "VoucherType": "CP",
+                "OB": "30.000",
+                "TransCnt": "0",
+                "DebitSum": "0.000",
+                "CreditSum": "0.000"
+            },
+            {
+                "VoucherType": "QP",
                 "OB": "0.000",
                 "TransCnt": "0",
                 "DebitSum": "0.000",
                 "CreditSum": "0.000"
             },
             {
-                "VoucherType": "CR",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "JV",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "OP",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "PU",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "SL",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "SR",
-                "OB": "0.000",
-                "TransCnt": "0",
-                "DebitSum": "0.000",
-                "CreditSum": "0.000"
-            },
-            {
-                "VoucherType": "ST",
+                "VoucherType": "BW",
                 "OB": "0.000",
                 "TransCnt": "0",
                 "DebitSum": "0.000",

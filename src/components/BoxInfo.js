@@ -15,8 +15,8 @@ const BoxInfo = (props) => (
         </View>
         <View style={{height: 7}}></View>
         <View style={styles.horizontalView}>
-            <Text style={styles.textStyle}>{props.label1}</Text>
-            <Text style={styles.textStyle}>{props.amount1}</Text>
+            <Text style={styles.textStyle}>{props.label}</Text>
+            <Text style={styles.textStyle}>{props.amount}</Text>
         </View>
         {/* <View style={styles.horizontalView}>
             <Text style={styles.textStyle}>{props.label2}</Text>

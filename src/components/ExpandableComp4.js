@@ -14,23 +14,67 @@ class ExpandableComp4 extends Component {
         super(props);
         this.state = {
             collapsed: true,
+            Exist: false
         }
-        this.componentHeight = new Animated.Value(80)
+        this.componentHeight = new Animated.Value(90)
 
         this.PE = this.props.PE
         this.OE = this.props.OE
     }
     componentDidMount() {
         console.log('LOOK Expense Comp4',this.PE,this.OE)
-     
+        this.getPurchaseExpense()
+        this.getOtherExpenses()
+    }
+
+    getPurchaseExpense = () => {
+        let jsonData = this.PE
+        if(jsonData.length > 1){
+            let amount = 0
+        const Expense = jsonData.map((d) => {
+            const { TransFullName, PayableAmount, ...rest } = d
+            let expense = [TransFullName, PayableAmount]
+            return expense
+        })
+        const purchaseExpense = Expense.map((e) => {
+            amount = amount + parseInt(e[1])
+            return amount
+        })
+        let length = purchaseExpense.length - 1
+        let expenseAmount = purchaseExpense[length]
+        this.setState({Exist: true, PExpense: Expense, PEamount: expenseAmount});
+        }
+        else{
+            console.log('Nothing is there in PE')
+            this.setState({Exist: false,PExpense: 'No Data', PEamount: 0});
+        }
+    }
+
+    getOtherExpenses = () => {
+        //let jsonData = json
+        let data = this.OE
+        //let data = jsonData.requestedData.otherPayments
+        let arr = []
+        const getOtherExpenses = data.map( (n) => {
+            let amount = parseInt(n.OB) - parseInt(n.CreditSum) + parseInt(n.DebitSum)
+            return arr.push(amount)
+        })
+        const reducer = (acc, currentValue) => acc + currentValue;
+        let otherExpense = arr.reduce(reducer);
+        this.setState({OtherExpenseAmount: otherExpense})
+        //console.log(arr)
     }
 
 
 
     toggleExpanded = () => {
         this.setState({ collapsed: !this.state.collapsed });
+        if(this.state.Exist){
         !this.state.collapsed ? this.onCollapse() : this.onExpand()
-
+        }
+        else{
+            this.setState({collapsed: true})
+        }
       }
       onExpand = () => {
         Animated.timing(this.componentHeight,{
@@ -41,7 +85,7 @@ class ExpandableComp4 extends Component {
       onCollapse = () => {
         Animated.timing(this.componentHeight,{
             duration: 100,
-            toValue: 80
+            toValue: 90
         }).start();
       }
       static navigationOptions = {
@@ -49,7 +93,7 @@ class ExpandableComp4 extends Component {
     }
     
     render() {
-       // console.log('in render',this.state)
+       console.log('in render expense',this.state)
         return (
             <Animated.View style={[styles.component ]} >
                 
@@ -60,17 +104,17 @@ class ExpandableComp4 extends Component {
                         <View style={styles.cardHeading}><Text style={styles.title}>{this.props.title}</Text></View>
                     </CardSection>
                     <Animated.View style={[styles.inCard, { height : this.componentHeight } ]}>
-                        <View style={{ height: 10 }}></View>
-                        {/* <View style={styles.horizontalView}>
-                            <Text style={styles.textStyle}>Sales Revenue</Text>
-                            <Text style={styles.textStyle}>${this.state.amount}</Text>
-                        </View>
-                        <View style={{ height: 5 }}></View>
+                        <View style={{ height: 2 }}></View>
                         <View style={styles.horizontalView}>
-                            <Text style={styles.textStyle}>Other Revenue</Text>
-                            <Text style={styles.textStyle}>${this.state.otherAmount}</Text>
-                        </View> */}
-                        <View style={{ height: 10 }}></View>
+                            <Text style={styles.textStyle}>Total Expense</Text>
+                            <Text style={styles.textStyle}>$ {this.state.PEamount}</Text>
+                        </View>
+                        <View style={{ height: 2 }}></View>
+                        <View style={styles.horizontalView}>
+                            <Text style={styles.textStyle}>Other Expense</Text>
+                            <Text style={styles.textStyle}>$ {this.state.OtherExpenseAmount}</Text>
+                        </View>
+                        <View style={{ height: 20 }}></View>
                         {/* ############ EXPANDABLE SECTION ################### */}
                         {/* {!this.state.collapsed ? <View>
                             {this.state.revenue.map( (e) => 
@@ -105,7 +149,8 @@ const styles = StyleSheet.create({
         borderRadius: 1
     },
     textStyle: {
-        fontSize: 17
+        fontSize: 17,
+        paddingVertical: 5
     },
     headingTextStyle: {
         fontSize: 18
@@ -114,6 +159,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 10,
         paddingRight: 15,
+        paddingVertical: 5,
         justifyContent: 'space-between'
     },
     cardHeading: {

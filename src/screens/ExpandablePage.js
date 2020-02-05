@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { View,Text,StyleSheet,Animated, TouchableOpacity,Touchable, Dimensions} from "react-native";
+import { View,Text,StyleSheet,Animated, TouchableOpacity,Touchable, Dimensions, ScrollView} from "react-native";
 import Card from '../components/Card';
 import CardSection from '../components/CardSection';
 import json from '../screens/data2.json'
 import BoxInfo from '../components/BoxInfo';
 import colors from "../config/colors";
+import { Divider } from 'react-native-elements';
+
 
 const WIDTH = Dimensions.get('screen').width;
 const SR = 'Sales Revenue';
@@ -20,7 +22,7 @@ class ExpandablePage extends Component {
             revenue: []
             //Sales: []
         }
-        this.componentHeight = new Animated.Value(80)
+        this.componentHeight = new Animated.Value(90)
         this.SI = this.props.SI
         this.OR = this.props.OR
 
@@ -74,7 +76,7 @@ class ExpandablePage extends Component {
       onCollapse = () => {
         Animated.timing(this.componentHeight,{
             duration: 100,
-            toValue: 80
+            toValue: 90
         }).start();
       }
       static navigationOptions = {
@@ -82,7 +84,18 @@ class ExpandablePage extends Component {
     }
     
     render() {
-       // console.log('in render',this.state)
+        const Display = this.state.revenue.map( (a) => {
+            return(
+                <ScrollView>
+                <View style={styles.horizontalView}>
+            <Text style={styles.textStyle}>{a[0]}</Text>
+            <Text style={styles.textStyle}>{a[1]}</Text>
+        </View>
+        <View style={{ height: 2 }}></View>
+        <Divider style={{ backgroundColor: 'gray' }} />
+        </ScrollView>
+            )
+        })
         return (
             <Animated.View style={[styles.component ]} >
                 
@@ -93,22 +106,23 @@ class ExpandablePage extends Component {
                         <View style={styles.cardHeading}><Text style={styles.title}>{this.props.title}</Text></View>
                     </CardSection>
                     <Animated.View style={[styles.inCard, { height : this.componentHeight } ]}>
-                        <View style={{ height: 10 }}></View>
+                        <View style={{ height: 2 }}></View>
                         <View style={styles.horizontalView}>
                             <Text style={styles.textStyle}>Sales Revenue</Text>
                             <Text style={styles.textStyle}>${this.state.amount}</Text>
                         </View>
-                        <View style={{ height: 5 }}></View>
+                        <View style={{ height: 2 }}></View>
                         <View style={styles.horizontalView}>
                             <Text style={styles.textStyle}>Other Revenue</Text>
                             <Text style={styles.textStyle}>${this.state.otherAmount}</Text>
                         </View>
-                        <View style={{ height: 10 }}></View>
+                        <View style={{ height: 20 }}></View>
                         {/* ############ EXPANDABLE SECTION ################### */}
-                        {!this.state.collapsed ? <View>
+                        {/* {!this.state.collapsed ? <View>
                             {this.state.revenue.map( (e) => 
                                 <BoxInfo subtitle='Maybe' label1={e[0]} amount1={e[1]} /> )}
-                        </View> : null}
+                        </View> : null} */}
+                        {Display}
                     </Animated.View>
                     </Card>
                 </TouchableOpacity>
@@ -138,7 +152,8 @@ const styles = StyleSheet.create({
         borderRadius: 1
     },
     textStyle: {
-        fontSize: 17
+        fontSize: 17,       
+        paddingVertical: 5,
     },
     headingTextStyle: {
         fontSize: 18
@@ -147,6 +162,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 10,
         paddingRight: 15,
+        paddingVertical: 5,
         justifyContent: 'space-between'
     },
     cardHeading: {

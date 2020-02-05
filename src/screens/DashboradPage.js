@@ -19,6 +19,7 @@ import Expandable from '../screens/ExpandablePage';
 import Expand2 from '../components/ExpandableComp2';
 import Expand3 from '../components/ExpandableComp3';
 import Expand4 from '../components/ExpandableComp4';
+import Test from './TestPage'
 
 class DashboardPage extends Component {
 
@@ -154,10 +155,14 @@ class DashboardPage extends Component {
                     {this.state.loaded2 ? <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} /> : null }
 
                     {this.state.loaded2 ? <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt}  /> : null }
-
-                    {this.state.loaded2 ? <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} /> : null }
-
-                    {this.state.loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null }
+                    {/* <Expand2 title='Receiptss' /> */}
+                    {/* <Expand3 title='Paymentss 3' /> */}
+                      
+                   
+                     {this.state.loaded2 ? <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} /> : null }
+                     
+                    {this.state.loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null } 
+                    <View style={{ height: 40 }}></View>
                     {/* <Line />
                     <View style={{ height: 130, flexDirection: 'row', justifyContent: 'space-around' }}>
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />

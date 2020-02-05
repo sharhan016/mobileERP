@@ -98,17 +98,7 @@ export default class App extends Component {
             </Collapsible>
 
 
-            <TestPage2 />
-            {/* <Accordion
-              activeSections={activeSections}
-              //sections={CONTENT}
-              touchableComponent={TouchableOpacity}
-              //={multipleSelect}
-              renderHeader={this.renderHeader}
-              renderContent={this.renderContent}
-              duration={400}
-              onChange={this.setSections}
-            /> */}
+       
           </ScrollView>
         </View>
       );
