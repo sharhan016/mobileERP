@@ -32,7 +32,7 @@ class ExpandableComp3 extends Component {
         let payments = this.SP
         //let payments = jsonData.requestedData.supplierPayments
         let amount = 0
-        console.log('IN COMP3 ',payments)
+        //console.log('IN COMP3 ',payments)
         const getLabels = payments.map( (l) => {
             let amount = parseInt(l.OB) - parseInt(l.CreditSum) + parseInt(l.DebitSum)
             if(l.VoucherType != ''){
@@ -104,11 +104,11 @@ class ExpandableComp3 extends Component {
     }
     
     render() {
-       console.log('in render',this.state)
-       const Display = this.state.supplierPayments.map( (a) => {
+       //console.log('in render payments',this.state)
+       const Display = this.state.supplierPayments.map( (a, index) => {
         return(
             <ScrollView>
-            <View style={styles.horizontalView}>
+            <View key={index} style={styles.horizontalView}>
         <Text style={styles.textStyle}>{a.VoucherName}</Text>
         <Text style={styles.textStyle}>{a.PaymentAmount}</Text>
     </View>

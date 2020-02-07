@@ -22,7 +22,7 @@ import Expand4 from '../components/ExpandableComp4';
 import Test from './TestPage'
 
 class DashboardPage extends Component {
-
+//TODO: screens2/testpage2.js   for the cash in bank
     constructor(props){
         super(props);
         this.state = {
@@ -74,7 +74,7 @@ class DashboardPage extends Component {
                 let res = response.data.requestedData
                 let cashOnBank = res.bankAccountBlock.CashOnBankAmount
                 let cashOnHand = res.cashAccountBlock.CashOnHandAmount
-                let cashPayable = res.payableBlock.PayableAmount
+                let cashPayable = res.payableBlock.PayableAmount 
                 let cashReceivable = res.receivableBlock.ReceivableAmount
                 this.setState({
                     CashOnBank: cashOnBank,
@@ -126,7 +126,6 @@ class DashboardPage extends Component {
         } catch (error) {
             console.log(error)
         }
-        console.log(this.state.SalesIncome)
 
 
     }

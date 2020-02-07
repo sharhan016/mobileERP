@@ -108,11 +108,11 @@ class ExpandableComp2 extends Component {
     }
     
     render() {
-        console.log('in render',this.state)
-        const Display = this.state.receipt.map( (a) => {
+       // console.log('in render receipt ',this.state)
+        const Display = this.state.receipt.map( (a, index) => {
             return(
                 <View>
-                <View style={styles.horizontalView}>
+                <View key={index} style={styles.horizontalView}>
             <Text style={styles.textStyle}>{a.VoucherName}</Text>
             <Text style={styles.textStyle}>{a.ReceiptAmount}</Text>
         </View>

@@ -22,7 +22,7 @@ class ExpandableComp4 extends Component {
         this.OE = this.props.OE
     }
     componentDidMount() {
-        console.log('LOOK Expense Comp4',this.PE,this.OE)
+       // console.log('LOOK Expense Comp4',this.PE,this.OE)
         this.getPurchaseExpense()
         this.getOtherExpenses()
     }
@@ -45,7 +45,7 @@ class ExpandableComp4 extends Component {
         this.setState({Exist: true, PExpense: Expense, PEamount: expenseAmount});
         }
         else{
-            console.log('Nothing is there in PE')
+            //console.log('Nothing is there in PE')
             this.setState({Exist: false,PExpense: 'No Data', PEamount: 0});
         }
     }
@@ -93,7 +93,8 @@ class ExpandableComp4 extends Component {
     }
     
     render() {
-       console.log('in render expense',this.state)
+       //console.log('in render expense',this.state)
+       //key={index}
         return (
             <Animated.View style={[styles.component ]} >
                 

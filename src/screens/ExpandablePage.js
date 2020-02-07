@@ -52,7 +52,7 @@ class ExpandablePage extends Component {
     }
     getOtherRevenueAmount = () => {
         let jsonData = this.OR
-        console.log('in exapnd',jsonData)
+        //console.log('in exapnd',jsonData)
         let amount = 0
         const revenueAmount = jsonData.map( (o) => {
             amount = parseInt(o.OB) - parseInt(o.CreditSum) + parseInt(o.DebitSum)
@@ -84,10 +84,10 @@ class ExpandablePage extends Component {
     }
     
     render() {
-        const Display = this.state.revenue.map( (a) => {
+        const Display = this.state.revenue.map( (a, index) => {
             return(
                 <ScrollView>
-                <View style={styles.horizontalView}>
+                <View key={index} style={styles.horizontalView}>
             <Text style={styles.textStyle}>{a[0]}</Text>
             <Text style={styles.textStyle}>{a[1]}</Text>
         </View>

@@ -4,7 +4,7 @@ import {
 } from "react-native";
 
 const Spacer = (props) => (
-    <View style={{paddingVertical: props.space}}>
+    <View style={{paddingVertical: props.space, paddingHorizontal: props.hspace}}>
     </View>
     )
 export default Spacer;
