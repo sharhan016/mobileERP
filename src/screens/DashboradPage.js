@@ -110,7 +110,8 @@ class DashboardPage extends Component {
                 let otherExpense = response.otherExpenses
                 let supplierPayment = response.supplierPayments
                 let otherPayment = response.otherPayments
-                console.log('this is sales',salesIncome)
+                let salesCategoryWise = response.sales_CategoryWise
+                console.log('this is sales',salesCategoryWise)
                 //TODO: add similiar fields
                 this.setState({
                     SalesIncome: salesIncome, 
@@ -121,6 +122,7 @@ class DashboardPage extends Component {
                     OtherExpense: otherExpense,
                     SupplierPayment: supplierPayment,
                     OtherPayment: otherPayment,
+                    SalesCategory: salesCategoryWise,
                     loaded2: true})
             })
         } catch (error) {
@@ -131,7 +133,7 @@ class DashboardPage extends Component {
     }
 
     render() {
-        console.log('In Render',this.state)
+       // console.log('In Render Dashboard',this.state)
         return (
             <View style={styles.container}>
                 <Header heading='Dashboard' onPress={() => this.props.navigation.openDrawer()} />
@@ -161,6 +163,10 @@ class DashboardPage extends Component {
                      {this.state.loaded2 ? <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} /> : null }
                      
                     {this.state.loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null } 
+                    <View style={{ height: 20 }}></View>
+                    {this.state.loaded2 ? <Card><PieJS dashData={this.state.SalesCategory} /></Card> : null}
+                    <View style={{ height: 20 }}></View>
+                    <LineCT />
                     <View style={{ height: 40 }}></View>
                     {/* <Line />
                     <View style={{ height: 130, flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -173,9 +179,9 @@ class DashboardPage extends Component {
 
                     <View style={styles.reportView}>
                         <Report />
-                        <Card><PieJS /></Card>
+                        
                         <View style={{ height: 10 }}></View>
-                        <LineCT />
+                        
 
                     </View> */}
 

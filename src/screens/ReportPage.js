@@ -73,11 +73,12 @@ class ReportPage extends Component {
             this.setState({ tokenID: token })
             console.log('this is in state', this.state.tokenID)
             //this.getCurrentMoneyStatus()
-            //this.getDashboardData()
+            this.getDashboardData()
         } catch (error) {
             console.log(error)
         }
     }
+  
     getDashboardData = async () => {
         const { value, date, lastWeekdate, weekday, customStartDate, customEndDate } = this.state
         let ali = 'ap_aldabbousdb' //TODO: change it 
@@ -116,33 +117,33 @@ class ReportPage extends Component {
         }
         try {
             console.log(body)
-            await axios.post(api.GET_DASHBOARD_DATA, { body }, { headers: post })
+            await axios.post(api.GET_DASHBOARD_DATA, body, { headers: post })
                 .then(res => {
                     //console.log('Response Got',response.data.requestedData)
                     let response = res.data.requestedData
-                    console.log('RES',res.data)
-                    console.log('RESPONSE IN DATES',response)
-                    // let salesIncome = response.salesIncomes
-                    // let otherRevenue = response.otherIncomes
-                    // let customerReceipt = response.customerReciepts
-                    // let otherReceipt = response.otherReciepts
-                    // let purchaseExpense = response.purchaseExpenses
-                    // let otherExpense = response.otherExpenses
-                    // let supplierPayment = response.supplierPayments
-                    // let otherPayment = response.otherPayments
-                    // console.log('this is sales', salesIncome)
-                    // this.setState({
-                    //     SalesIncome: salesIncome,
-                    //     OtherRevenue: otherRevenue,
-                    //     CustomerReceipt: customerReceipt,
-                    //     OtherReceipt: otherReceipt,
-                    //     PurchaseExpense: purchaseExpense,
-                    //     OtherExpense: otherExpense,
-                    //     SupplierPayment: supplierPayment,
-                    //     OtherPayment: otherPayment,
-                    //     entryLoader: false,
-                    //     loaded: true
-                    // })
+                    console.log('RES', res.data)
+                    console.log('RESPONSE IN DATES', response)
+                    let salesIncome = response.salesIncomes
+                    let otherRevenue = response.otherIncomes
+                    let customerReceipt = response.customerReciepts
+                    let otherReceipt = response.otherReciepts
+                    let purchaseExpense = response.purchaseExpenses
+                    let otherExpense = response.otherExpenses
+                    let supplierPayment = response.supplierPayments
+                    let otherPayment = response.otherPayments
+                    console.log('this is sales', salesIncome)
+                    this.setState({
+                        SalesIncome: salesIncome,
+                        OtherRevenue: otherRevenue,
+                        CustomerReceipt: customerReceipt,
+                        OtherReceipt: otherReceipt,
+                        PurchaseExpense: purchaseExpense,
+                        OtherExpense: otherExpense,
+                        SupplierPayment: supplierPayment,
+                        OtherPayment: otherPayment,
+                        entryLoader: false,
+                        loaded: true
+                    })
                 })
         } catch (error) {
             console.log(error)
@@ -265,8 +266,8 @@ class ReportPage extends Component {
     }
     getReportBtn = () => {
         console.log('Button is clicked')
-        this.setState({ 
-            reportloading: true, 
+        this.setState({
+            reportloading: true,
             loaded: false,
             SalesIncome: [],
             OtherRevenue: [],
@@ -282,7 +283,7 @@ class ReportPage extends Component {
 
 
     render() {
-        console.log('In DateSection Render', this.state)
+        //console.log('In DateSection Render', this.state)
         const { value, date, lastWeekdate, weekday, currentMonth, customStartDate, customEndDate } = this.state;
         const DatePicker = <View style={styles.dateContainer}>
             <TouchableOpacity onPress={this.decrementDate}><Ionicons name="md-arrow-dropleft" size={25} color={'black'} /></TouchableOpacity>
@@ -350,10 +351,10 @@ class ReportPage extends Component {
                 {value == 0 ? DatePicker : value == 1 ? WeekPicker : value == 2 ? MonthPicker : CustomPicker}
                 {ReportButton}
                 {/* <Spacer space={5} /> */}
-                {/* <ScrollView>
+                <ScrollView>
                     {this.state.loaded ? Report : progress}
                     <Spacer space={20} />
-                </ScrollView> */}
+                </ScrollView>
                 <DateTimePickerModal
                     isVisible={this.state.isDatePickerVisible}
                     mode="date"

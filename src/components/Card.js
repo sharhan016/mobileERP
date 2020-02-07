@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import colors from '../config/colors';
 
 const Card = (props) => {
     return(
@@ -23,7 +24,7 @@ const styles = {
         marginLeft: 5,
         marginRight: 5,
         marginTop: 15,
-        backgroundColor: 'white'
+        backgroundColor: colors.WHITISH
     }
 }
 

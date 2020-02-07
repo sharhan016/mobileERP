@@ -87,7 +87,7 @@ class ExpandablePage extends Component {
         const Display = this.state.revenue.map( (a, index) => {
             return(
                 <ScrollView>
-                <View key={index} style={styles.horizontalView}>
+                <View key={a.TransCode} style={styles.horizontalView}>
             <Text style={styles.textStyle}>{a[0]}</Text>
             <Text style={styles.textStyle}>{a[1]}</Text>
         </View>
