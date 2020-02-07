@@ -44,7 +44,6 @@ class DashboardPage extends Component {
         header: null
     }
     openReport = () => {
-        console.log('Ene thottu')
         this.props.navigation.navigate('Report')
     }
     getToken = async () => {
@@ -135,10 +134,17 @@ class DashboardPage extends Component {
     render() {
        // console.log('In Render Dashboard',this.state)
         return (
-            <View style={styles.container}>
+            <View 
+            style={styles.container}
+            onStartShouldSetResponderCapture={() => {
+                this.setState({ enableScrollViewScroll: true });
+            }}
+            >
                 <Header heading='Dashboard' onPress={() => this.props.navigation.openDrawer()} />
 
-                <ScrollView >
+                <ScrollView 
+                scrollEnabled={this.state.enableScrollViewScroll}
+                >
                     <StatusBar barStyle="light-content" hidden={false} backgroundColor={colors.BGStatus} />
                     <View style={styles.container}>
                         <View style={styles.topNav}>
@@ -164,7 +170,7 @@ class DashboardPage extends Component {
                      
                     {this.state.loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null } 
                     <View style={{ height: 20 }}></View>
-                    {this.state.loaded2 ? <Card><PieJS dashData={this.state.SalesCategory} /></Card> : null}
+                    {this.state.loaded2 ? <Card ><PieJS dashData={this.state.SalesCategory} /></Card> : null}
                     <View style={{ height: 20 }}></View>
                     <LineCT />
                     <View style={{ height: 40 }}></View>

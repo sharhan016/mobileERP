@@ -6,8 +6,12 @@ import MyLabels from './MyLabels';
 export default class PieJS extends React.PureComponent {
   constructor(props) {
     super(props);
-    const data = [11001,20123,30123,40321,10123];
-    const colors = ['A40E4C', '2C2C54', 'ACC3A6', 'F5D6BA', '6A6FEF'];
+    let dashValue = this.props.dashData
+    const data = dashValue.map( (d) => { return parseInt(d.GrandTotal) + 1000})
+    console.log('DATA IN PIE',data)
+    const stockName = dashValue.map( (n) => {return n.CategoryName})
+    const colorName = dashValue.map( (c) => { return 'A44E4C' })
+    const colors = ['A40E4C', '2C2C54', 'ACC3A6', 'F5D6BA', '6A6FEF', 'ACC3A6', '2C2C54'];
 
     const pieData = data
       .filter(value => value > 0)
@@ -15,8 +19,8 @@ export default class PieJS extends React.PureComponent {
         const toRet = {
           value,
           title: `${data[index]}`,
-          color: `#${colors[index]}`,
-          help: 'anyValue',      // Add extra parameter here
+          color: `#${colorName[index]}`,
+          help: `${stockName[index]}`,      // Add extra parameter here
           key: `pie-${index}`,
         };
         return toRet;
@@ -39,7 +43,8 @@ export default class PieJS extends React.PureComponent {
 
   render() {
     return (
-      <View style={styles.pieContainer} >
+      <View 
+      style={styles.pieContainer} >
           <TouchableOpacity onPress={this.animate}
           style={{  alignItems: 'center'  }} >
           <Text style={{ fontSize: 30 }}>Department Wise</Text>
@@ -63,8 +68,9 @@ export default class PieJS extends React.PureComponent {
           data={this.state.pieData}
           animate
         >
-          <MyLabels />
+        <MyLabels />
         </Pie>
+        
         {/* <Button title="animate" onPress={this.animate} /> */}
       </View>
     );

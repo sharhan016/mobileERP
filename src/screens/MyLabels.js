@@ -11,7 +11,7 @@ export default function MyLabels({ data, focus }) {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'center',
+              //justifyContent: 'center',
             }}
           >
             <View style={[styles.dot, { backgroundColor: arc.color }]} />
@@ -27,10 +27,13 @@ export default function MyLabels({ data, focus }) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 0.5,
+    //width: 100,
+    //height: 400,
+    backgroundColor: 'gray',
+    // flexDirection: 'column',
+    justifyContent: 'flex-start',
+    //alignItems: 'center',
+    // flex: 0.5,
   },
   listItem: {
     marginVertical: 10,
@@ -40,6 +43,6 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
   },
 });
