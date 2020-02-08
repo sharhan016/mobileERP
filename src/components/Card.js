@@ -4,7 +4,7 @@ import colors from '../config/colors';
 
 const Card = (props) => {
     return(
-        <View style= {styles.containerStyle}>
+        <View style= {[styles.containerStyle, props.style]}>
         {props.children}
         </View>
     );
@@ -14,9 +14,9 @@ const styles = {
     containerStyle : {
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: colors.EXPAND_INNER,
+        borderColor: '#ddd',
         borderBottomWidth: 0,
-        shadowColor: colors.EXPAND_INNER,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 2,

@@ -126,12 +126,12 @@ class ExpandableComp2 extends Component {
                 
                 <TouchableOpacity activeOpacity={.9} onPress={this.toggleExpanded}>
                 <View style={{marginBottom: 10}}>
-                    <Card>
+                <Card style={{borderColor: colors.EXPAND_INNER, shadowColor: colors.EXPAND_INNER}}>
                     <CardSection style={{padding: 0}}>
                         <View style={styles.cardHeading}><Text style={styles.title}>{this.props.title}</Text></View>
                     </CardSection>
                     </Card>
-                    <Card>
+                    <Card style={{borderColor: colors.EXPAND_INNER, shadowColor: colors.EXPAND_INNER}}>
                     <Animated.View style={[styles.inCard, { height : this.componentHeight } ]}>
                         <View style={{ height: 2 }}></View>
                         <View style={styles.horizontalView}>
