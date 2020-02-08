@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
@@ -34,7 +34,8 @@ class DashboardPage extends Component {
             SalesIncome: [],
            // OtherRevenue: [],
             loaded: false,
-            loaded2: false
+            loaded2: false,
+            initial: true
         }
     }
     componentDidMount(){
@@ -110,6 +111,7 @@ class DashboardPage extends Component {
                 let supplierPayment = response.supplierPayments
                 let otherPayment = response.otherPayments
                 let salesCategoryWise = response.sales_CategoryWise
+                let stockCategoryWise = response.stock_CategoryWise
                 console.log('this is sales',salesCategoryWise)
                 //TODO: add similiar fields
                 this.setState({
@@ -122,7 +124,9 @@ class DashboardPage extends Component {
                     SupplierPayment: supplierPayment,
                     OtherPayment: otherPayment,
                     SalesCategory: salesCategoryWise,
-                    loaded2: true})
+                    StockCategory: stockCategoryWise,
+                    loaded2: true,
+                    initial: false})
             })
         } catch (error) {
             console.log(error)
@@ -132,7 +136,10 @@ class DashboardPage extends Component {
     }
 
     render() {
-       // console.log('In Render Dashboard',this.state)
+        const initialLoader = <ActivityIndicator
+        animating={this.state.initial}
+        //style={{ marginTop: 10 }}
+        color={colors.HEADER_BLUE} size="small" />
         return (
             <View 
             style={styles.container}
@@ -158,7 +165,7 @@ class DashboardPage extends Component {
                             <RoundNav iconName='activity' heading='Products' iconStyle={{ backgroundColor: '#f0c8b4', borderColor: '#b2856d' }} />
                         </View>
                     </View>
-
+                    {initialLoader}
                     {this.state.loaded2 ? <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} /> : null }
 
                     {this.state.loaded2 ? <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt}  /> : null }
@@ -170,9 +177,11 @@ class DashboardPage extends Component {
                      
                     {this.state.loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null } 
                     <View style={{ height: 20 }}></View>
-                    {this.state.loaded2 ? <Card ><PieJS dashData={this.state.SalesCategory} /></Card> : null}
+                    {this.state.loaded2 ? <Card ><PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} /></Card> : null}
                     <View style={{ height: 20 }}></View>
-                    <LineCT />
+                    {this.state.loaded2 ? <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card> : null}
+                    <View style={{ height: 20 }}></View>
+                    {/* <LineCT />  */}
                     <View style={{ height: 40 }}></View>
                     {/* <Line />
                     <View style={{ height: 130, flexDirection: 'row', justifyContent: 'space-around' }}>

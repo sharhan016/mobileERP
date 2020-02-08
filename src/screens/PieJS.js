@@ -7,11 +7,22 @@ export default class PieJS extends React.PureComponent {
   constructor(props) {
     super(props);
     let dashValue = this.props.dashData
-    const data = dashValue.map( (d) => { return parseInt(d.GrandTotal) + 1000})
+    const data = dashValue.map( (d) => {
+      let exe = this.props.execute
+      console.log('value exe',exe)
+      if(exe == 1){
+        console.log('I am in 1')
+      return parseInt(d.GrandTotal) + 1000
+      }
+      else if(exe == 2){
+        console.log('I am in 2')
+        return parseInt(d.OSVal) + 1000
+      }
+      })
     console.log('DATA IN PIE',data)
     const stockName = dashValue.map( (n) => {return n.CategoryName})
     const colorName = dashValue.map( (c) => { 
-      let letters = "0223456285ABCDEE"
+      let letters = "0223456285ABCDEE" 
       let color = ''
       for (var i = 0; i < 6; i++) 
        color += letters[(Math.floor(Math.random() * 16))]; 
@@ -55,7 +66,7 @@ export default class PieJS extends React.PureComponent {
           <TouchableOpacity onPress={this.animate}
           style={{  alignItems: 'center'  }} >
           <Text style={{ fontSize: 30 }}>Department Wise</Text>
-          <Text style={{ fontSize: 18 }}>Stock Value</Text>
+          <Text style={{ fontSize: 18 }}>{this.props.text} Value</Text>
         </TouchableOpacity>
         <Pie
           ref={this.pie}
@@ -70,8 +81,8 @@ export default class PieJS extends React.PureComponent {
             height: 260,
             flex: 1,
           }}
-          outerRadius={110} // it was 120
-          innerRadius={25}
+          outerRadius={90} // it was 120
+          innerRadius={20}
           data={this.state.pieData}
           animate
         >

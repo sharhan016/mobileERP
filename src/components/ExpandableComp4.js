@@ -100,10 +100,13 @@ class ExpandableComp4 extends Component {
                 
                 <TouchableOpacity activeOpacity={.9} onPress={this.toggleExpanded}>
     
+                <View style={{marginBottom: 10}}>
                     <Card>
                     <CardSection style={{padding: 0}}>
                         <View style={styles.cardHeading}><Text style={styles.title}>{this.props.title}</Text></View>
                     </CardSection>
+                    </Card>
+                    <Card>
                     <Animated.View style={[styles.inCard, { height : this.componentHeight } ]}>
                         <View style={{ height: 2 }}></View>
                         <View style={styles.horizontalView}>
@@ -123,6 +126,7 @@ class ExpandableComp4 extends Component {
                         </View> : null} */}
                     </Animated.View>
                     </Card>
+                    </View>
                 </TouchableOpacity>
             </Animated.View>
         );
@@ -144,14 +148,14 @@ const styles = StyleSheet.create({
 
     },
     inCard: {
-        backgroundColor: colors.MISCHKA,
+        backgroundColor: colors.EXPAND_INNER,             // color
         paddingLeft: 10,
         height: 80,
-        borderRadius: 1
+        borderRadius: 6
     },
     textStyle: {
-        fontSize: 17,
-        paddingVertical: 5
+        fontSize: 17,       
+        paddingVertical: 5,
     },
     headingTextStyle: {
         fontSize: 18
@@ -166,12 +170,13 @@ const styles = StyleSheet.create({
     cardHeading: {
         alignItems: 'center',
         width: WIDTH - 50,
-        backgroundColor: colors.SILVER,
-        borderRadius: 2
+        backgroundColor: colors.EXPAND_TITLE,         // color
+        borderRadius: 6
     },
     title: {
         textAlign: 'center',
         fontSize: 22,
+        color: 'white',
         fontWeight: '300',
         paddingTop: 6,
         marginBottom: 10,

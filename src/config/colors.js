@@ -11,6 +11,8 @@ const colors = {
     DRAWER_ACTIVE: 'rgb(184, 235, 235)',
     DRAWER_TINT: '#054e64',
     HEADER_BLUE: '#092d5f',
+    EXPAND_INNER: '#c9dcfc',
+    EXPAND_TITLE: '#0f448c',
     LoginBG: '#d7e3fa',
     LoginButton: '#092d5f',
     BGStatus: '#031a3b'

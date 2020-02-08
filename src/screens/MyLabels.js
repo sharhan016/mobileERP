@@ -8,7 +8,7 @@ export default function MyLabels({ data, focus }) {
           data = {data}
           keyExtractor = {() => { return data.index}}
           renderItem = { (data) => {
-            console.log('from FlatList',data);
+            //console.log('from FlatList',data);
             return(
               <TouchableOpacity onPress={() => {
                 focus(data.index)

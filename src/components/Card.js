@@ -14,16 +14,16 @@ const styles = {
     containerStyle : {
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: '#ddd',
+        borderColor: colors.EXPAND_INNER,
         borderBottomWidth: 0,
-        shadowColor: '#000',
+        shadowColor: colors.EXPAND_INNER,
         shadowOffset: { width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 2,
-        elevation: 2,
+        elevation: 1.5,
         marginLeft: 5,
         marginRight: 5,
-        marginTop: 15,
+        //marginTop: 15,
         backgroundColor: colors.WHITISH
     }
 }
