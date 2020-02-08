@@ -7,6 +7,7 @@ import 'react-native-gesture-handler';
 class App extends Component {
   state = { }
   render() {
+    console.disableYellowBox = true;
     return <Router /> }
 }
 

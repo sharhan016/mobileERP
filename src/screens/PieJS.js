@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Pie from 'react-native-fab-pie';
 import MyLabels from './MyLabels';
+
+const width = Dimensions.get('window').width;
 
 export default class PieJS extends React.PureComponent {
   constructor(props) {
@@ -9,17 +11,13 @@ export default class PieJS extends React.PureComponent {
     let dashValue = this.props.dashData
     const data = dashValue.map( (d) => {
       let exe = this.props.execute
-      console.log('value exe',exe)
       if(exe == 1){
-        console.log('I am in 1')
       return parseInt(d.GrandTotal) + 1000
       }
       else if(exe == 2){
-        console.log('I am in 2')
         return parseInt(d.OSVal) + 1000
       }
       })
-    console.log('DATA IN PIE',data)
     const stockName = dashValue.map( (n) => {return n.CategoryName})
     const colorName = dashValue.map( (c) => { 
       let letters = "0223456285ABCDEE" 
@@ -29,7 +27,6 @@ export default class PieJS extends React.PureComponent {
       return color 
     
     })
-    const colors = ['A40E4C', '2C2C54', 'ACC3A6', 'F5D6BA', '6A6FEF', 'ACC3A6', '2C2C54'];
 
     const pieData = data
       .filter(value => value > 0)
@@ -89,7 +86,6 @@ export default class PieJS extends React.PureComponent {
         <MyLabels />
         </Pie>
         
-        {/* <Button title="animate" onPress={this.animate} /> */}
       </View>
     );
   }
@@ -102,5 +98,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+    width: width - 20
   }
 })

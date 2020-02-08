@@ -39,7 +39,7 @@ export default function MyLabels({ data, focus }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 150,
+    width: 140,
     height: 300,
     //backgroundColor: 'gray',
     justifyContent: 'flex-start',

@@ -11,6 +11,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
+import PieJS from './PieJS';
 import Revenue from '../screens/ExpandablePage';
 import Receipt from '../components/ExpandableComp2';
 import Payment from '../components/ExpandableComp3';
@@ -130,7 +131,9 @@ class ReportPage extends Component {
                     let purchaseExpense = response.purchaseExpenses
                     let otherExpense = response.otherExpenses
                     let supplierPayment = response.supplierPayments
-                    let otherPayment = response.otherPayments
+                    let otherPayment = response.otherPayments 
+                    let salesCategoryWise = response.sales_CategoryWise
+                    let stockCategoryWise = response.stock_CategoryWise
                     console.log('this is sales', salesIncome)
                     this.setState({
                         SalesIncome: salesIncome,
@@ -141,6 +144,8 @@ class ReportPage extends Component {
                         OtherExpense: otherExpense,
                         SupplierPayment: supplierPayment,
                         OtherPayment: otherPayment,
+                        SalesCategory: salesCategoryWise,
+                        StockCategory: stockCategoryWise,
                         entryLoader: false,
                         loaded: true
                     })
@@ -323,6 +328,8 @@ class ReportPage extends Component {
             <Receipt title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt} />
             <Payment title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} />
             <Expense title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense} />
+            <PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} />
+            <PieJS text='Stock' execute={2} dashData={this.state.StockCategory} />
         </View>
         return (
             <View style={styles.container} >
@@ -396,7 +403,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 40,
         justifyContent: 'space-between',
-        width: width - 40,
+        width: width + 30,
         marginTop: 20,
         marginRight: 15
     },
