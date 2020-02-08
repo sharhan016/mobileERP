@@ -1,29 +1,47 @@
 import React from 'react';
-import { Text, StyleSheet, View, TouchableNativeFeedback } from 'react-native';
+import { Text, StyleSheet, View, TouchableNativeFeedback, TouchableOpacity, FlatList } from 'react-native';
 
 export default function MyLabels({ data, focus }) {
   return <View style={styles.container}>
-      {data.map((arc, index) => (
+    <FlatList 
+          nestedScrollEnabled={true}
+          data = {data}
+          keyExtractor = {() => { return data.index}}
+          renderItem = { (data) => {
+            console.log('from FlatList',data);
+            return(
+              <TouchableOpacity onPress={() => {
+                focus(data.index)
+                }} key={data.index}>
+              <View style={styles.listContainer} >
+           <View style={[styles.dot, { backgroundColor: data.item.color }]} />
+            <View style={styles.listItem}>
+            <Text>{data.item.title}</Text>
+            <Text>{data.item.help}</Text>
+            </View>
+          </View>
+          </TouchableOpacity>
+            )
+          
+         }}
+          />
+      {/* {data.map((arc, index) => (
         <TouchableNativeFeedback onPress={() => {
           focus(index)
           }} key={index}>
-          <View style={styles.listContainer} >
-            <View style={[styles.dot, { backgroundColor: arc.color }]} />
-            <View style={styles.listItem}>
-              <Text>{arc.title}</Text>
-              <Text>{arc.help}</Text>
-            </View>
-          </View>
+          
+          
         </TouchableNativeFeedback>
-      ))}
+      ))} */}
     </View>;
 }
+
 
 const styles = StyleSheet.create({
   container: {
     width: 150,
-    height: 400,
-    backgroundColor: 'gray',
+    height: 300,
+    //backgroundColor: 'gray',
     justifyContent: 'flex-start',
   },
   listItem: {

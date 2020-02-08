@@ -10,7 +10,14 @@ export default class PieJS extends React.PureComponent {
     const data = dashValue.map( (d) => { return parseInt(d.GrandTotal) + 1000})
     console.log('DATA IN PIE',data)
     const stockName = dashValue.map( (n) => {return n.CategoryName})
-    const colorName = dashValue.map( (c) => { return 'A44E4C' })
+    const colorName = dashValue.map( (c) => { 
+      let letters = "0223456285ABCDEE"
+      let color = ''
+      for (var i = 0; i < 6; i++) 
+       color += letters[(Math.floor(Math.random() * 16))]; 
+      return color 
+    
+    })
     const colors = ['A40E4C', '2C2C54', 'ACC3A6', 'F5D6BA', '6A6FEF', 'ACC3A6', '2C2C54'];
 
     const pieData = data
