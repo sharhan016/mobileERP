@@ -7,13 +7,7 @@ export default function MyLabels({ data, focus }) {
         <TouchableNativeFeedback onPress={() => {
           focus(index)
           }} key={index}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              //justifyContent: 'center',
-            }}
-          >
+          <View style={styles.listContainer} >
             <View style={[styles.dot, { backgroundColor: arc.color }]} />
             <View style={styles.listItem}>
               <Text>{arc.title}</Text>
@@ -27,13 +21,10 @@ export default function MyLabels({ data, focus }) {
 
 const styles = StyleSheet.create({
   container: {
-    //width: 100,
-    //height: 400,
+    width: 150,
+    height: 400,
     backgroundColor: 'gray',
-    // flexDirection: 'column',
     justifyContent: 'flex-start',
-    //alignItems: 'center',
-    // flex: 0.5,
   },
   listItem: {
     marginVertical: 10,
@@ -45,4 +36,9 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     marginHorizontal: 5,
   },
+  listContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    //justifyContent: 'center',
+  }
 });
