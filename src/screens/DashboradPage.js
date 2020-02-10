@@ -35,11 +35,11 @@ class DashboardPage extends Component {
            // OtherRevenue: [],
             loaded: false,
             loaded2: false,
-            initial: true
+            initial: false //TODO: change to true
         }
     }
     componentDidMount(){
-        this.getToken()
+        //this.getToken()
     }
     static navigationOptions = {
         header: null
@@ -181,7 +181,7 @@ class DashboardPage extends Component {
                     <View style={{ height: 20 }}></View>
                     {this.state.loaded2 ? <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card> : null}
                     <View style={{ height: 20 }}></View>
-                    {/* <LineCT />  */}
+                     <LineCT /> 
                     <View style={{ height: 40 }}></View>
                     {/* <Line />
                     <View style={{ height: 130, flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -190,7 +190,7 @@ class DashboardPage extends Component {
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                     </View>
-                    <Line />
+                     <Line />
 
                     <View style={styles.reportView}>
                         <Report />
