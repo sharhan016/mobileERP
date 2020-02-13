@@ -19,10 +19,10 @@ import Expandable from '../screens/ExpandablePage';
 import Expand2 from '../components/ExpandableComp2';
 import Expand3 from '../components/ExpandableComp3';
 import Expand4 from '../components/ExpandableComp4';
-import Test from './TestPage'
+import Test from './TestPage';
 
 class DashboardPage extends Component {
-//TODO: screens2/testpage2.js   for the cash in bank
+
     constructor(props){
         super(props);
         this.state = {
@@ -35,11 +35,11 @@ class DashboardPage extends Component {
            // OtherRevenue: [],
             loaded: false,
             loaded2: false,
-            initial: false //TODO: change to true
+            initial: true
         }
     }
     componentDidMount(){
-        //this.getToken()
+        this.getToken()
     }
     static navigationOptions = {
         header: null
@@ -51,16 +51,18 @@ class DashboardPage extends Component {
         try {
             let token = await AsyncStorage.getItem(api.TOKEN);
             let data = await AsyncStorage.getItem(api.USER_DATA);
-            var object = JSON.parse(data)
+            //var object = JSON.parse(data)
             this.setState({tokenID: token})
-            console.log('this is in state',this.state.tokenID)
-            //this.getCurrentMoneyStatus()
+            //console.log('this is in state',this.state.tokenID)
+            //this.getCurrentMoneyStatus() TODO: change it
             this.getDashboardData()
         } catch (error) {
             console.log(error)
         }
     }
+    
     getCurrentMoneyStatus = async () => {
+
         let alias = 'ap_lagnuvodb' //TODO: change it later
         let post = {
             "alias" : alias,
@@ -70,7 +72,7 @@ class DashboardPage extends Component {
         try {
             await axios.post(api.GET_CASH_VALUES, {} , {headers: post} )
             .then(response => {
-                console.log('Response Got',response.data.requestedData)
+                console.log('Response For Money Status',response)
                 let res = response.data.requestedData
                 let cashOnBank = res.bankAccountBlock.CashOnBankAmount
                 let cashOnHand = res.cashAccountBlock.CashOnHandAmount
@@ -89,9 +91,10 @@ class DashboardPage extends Component {
         } catch (error) {
             console.log('inside catch block',error)
         }
+
     }
     getDashboardData = async () => {
-        let ali = 'ap_aldabbousdb' //TODO: change it
+        let ali = 'ap_aldabbousdb' //TODO: change it 
         let post = {
             "alias" : ali,
             "authorization" : this.state.tokenID,
@@ -99,9 +102,9 @@ class DashboardPage extends Component {
         try {
             await axios.post(api.GET_DASHBOARD_DATA, {} , {headers: post} )
             .then( res => {
-                //console.log('Response Got',response.data.requestedData)
+
                 let response = res.data.requestedData
-                console.log(response)
+
                 let salesIncome = response.salesIncomes
                 let otherRevenue = response.otherIncomes
                 let customerReceipt = response.customerReciepts
@@ -112,8 +115,7 @@ class DashboardPage extends Component {
                 let otherPayment = response.otherPayments
                 let salesCategoryWise = response.sales_CategoryWise
                 let stockCategoryWise = response.stock_CategoryWise
-                console.log('this is sales',salesCategoryWise)
-                //TODO: add similiar fields
+
                 this.setState({
                     SalesIncome: salesIncome, 
                     OtherRevenue: otherRevenue, 
@@ -136,9 +138,9 @@ class DashboardPage extends Component {
     }
 
     render() {
+       // console.log('In Dashboard Render',this.state)
         const initialLoader = <ActivityIndicator
         animating={this.state.initial}
-        //style={{ marginTop: 10 }}
         color={colors.HEADER_BLUE} size="small" />
         return (
             <View 
@@ -159,18 +161,25 @@ class DashboardPage extends Component {
                             <RoundNav iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
                             <RoundNav iconName='clipboard' heading='Orders' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
                         </View>
-                        <View style={styles.topNav}>
+                        {/* <View style={styles.topNav}>
                             <RoundNav iconName='activity' heading='Tasks' iconStyle={{ backgroundColor: '#d5e8d5', borderColor: '#aecbaa' }} />
                             <RoundNav iconName='activity' heading='Sales' iconStyle={{ backgroundColor: '#f9f1cd', borderColor: '#e4d594' }} />
                             <RoundNav iconName='activity' heading='Products' iconStyle={{ backgroundColor: '#f0c8b4', borderColor: '#b2856d' }} />
-                        </View>
-                    </View>
-                    {initialLoader}
+                        </View> */}
+                         {initialLoader}
+
+                        {/* <View style={{ height: 200, flexDirection: 'column', justifyContent: 'space-around' }}>
+                        <View style={{ height: 5 }}></View>
+                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
+                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
+                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
+                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
+                        </View> */}
+                    
                     {this.state.loaded2 ? <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} /> : null }
 
                     {this.state.loaded2 ? <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt}  /> : null }
-                    {/* <Expand2 title='Receiptss' /> */}
-                    {/* <Expand3 title='Paymentss 3' /> */}
+                 
                       
                    
                      {this.state.loaded2 ? <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} /> : null }
@@ -181,15 +190,12 @@ class DashboardPage extends Component {
                     <View style={{ height: 20 }}></View>
                     {this.state.loaded2 ? <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card> : null}
                     <View style={{ height: 20 }}></View>
-                     <LineCT /> 
+                     {this.state.loaded2 ? <LineCT /> : null}
+                     <View style={{ height: 10 }}></View>
+                     {this.state.loaded2 ? <LineCT bez={true} /> : null }
                     <View style={{ height: 40 }}></View>
                     {/* <Line />
-                    <View style={{ height: 130, flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                    </View>
+                    
                      <Line />
 
                     <View style={styles.reportView}>
@@ -199,7 +205,7 @@ class DashboardPage extends Component {
                         
 
                     </View> */}
-
+                    </View>
                 </ScrollView>
             </View>
         );

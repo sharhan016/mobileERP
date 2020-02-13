@@ -7,8 +7,7 @@ class TestPage2 extends Component {
         super(props);
         this.state = {  };
     }
-    
-    
+     
     getCash = () => {
         let bankCash = jsonData.requestedData.bankAccountBlock.CashOnBank_tillnow
         const cleanData = bankCash.map((d) => {

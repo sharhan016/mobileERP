@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View,Text,StyleSheet,Animated, TouchableOpacity,Touchable, Dimensions, ScrollView} from "react-native";
+import { View,Text,StyleSheet,Animated, TouchableOpacity, FlatList, Touchable, Dimensions, ScrollView} from "react-native";
 import Card from './Card';
 import CardSection from './CardSection';
 import json from '../screens/data2.json'
@@ -90,12 +90,12 @@ class ExpandableComp3 extends Component {
       onExpand = () => {
         Animated.timing(this.componentHeight,{
             duration: 1000,
-            toValue: 300,
+            toValue: 200,
         }).start();
       }
       onCollapse = () => {
         Animated.timing(this.componentHeight,{
-            duration: 100,
+            duration: 500,
             toValue: 90
         }).start();
       }
@@ -113,7 +113,7 @@ class ExpandableComp3 extends Component {
         <Text style={styles.textStyle}>{a.PaymentAmount}</Text>
     </View>
     <View style={{ height: 2 }}></View>
-    <Divider style={{ backgroundColor: 'blue' }} />
+    <Divider style={{ backgroundColor: 'gray' }} />
     </ScrollView>
         )
     })
@@ -141,8 +141,24 @@ class ExpandableComp3 extends Component {
                         </View>
                         <View style={{ height: 20 }}></View>
                         {/* ############ EXPANDABLE SECTION ################### */}
-                        {Display}
-                        
+                        <FlatList
+                                    nestedScrollEnabled={true}
+                                    data={this.state.supplierPayments}
+                                    keyExtractor={(i, index) => {
+                                        return index
+                                    }}
+                                    renderItem={(data) => {
+                                        return (<View>
+                                            <View style={styles.horizontalView}>
+                                                <Text style={styles.textStyle}>{data.item.VoucherName}</Text>
+                                                <Text style={styles.textStyle}>{data.item.PaymentAmount}</Text>
+                                            </View>
+                                            <View style={{ height: 2 }}></View>
+                                            <Divider style={{ backgroundColor: 'gray' }} />
+                                        </View>
+                                        )
+                                    }}
+                                />
                     
                       
                     </Animated.View>

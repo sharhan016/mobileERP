@@ -6,7 +6,8 @@ export default function MyLabels({ data, focus }) {
     <FlatList 
           nestedScrollEnabled={true}
           data = {data}
-          keyExtractor = {() => { return data.index}}
+          keyExtractor = {(d,i) => { 
+            return d.key}}
           renderItem = { (data) => {
             //console.log('from FlatList',data);
             return(

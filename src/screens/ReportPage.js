@@ -122,7 +122,6 @@ class ReportPage extends Component {
                 .then(res => {
                     //console.log('Response Got',response.data.requestedData)
                     let response = res.data.requestedData
-                    console.log('RES', res.data)
                     console.log('RESPONSE IN DATES', response)
                     let salesIncome = response.salesIncomes
                     let otherRevenue = response.otherIncomes
@@ -134,7 +133,6 @@ class ReportPage extends Component {
                     let otherPayment = response.otherPayments 
                     let salesCategoryWise = response.sales_CategoryWise
                     let stockCategoryWise = response.stock_CategoryWise
-                    console.log('this is sales', salesIncome)
                     this.setState({
                         SalesIncome: salesIncome,
                         OtherRevenue: otherRevenue,
@@ -417,7 +415,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     buttonStyle: {
-        width: '20%',
+        width: '30%',
         marginTop: 20,
         //marginLeft: 20
     }

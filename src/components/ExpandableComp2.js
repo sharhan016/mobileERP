@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View,Text,StyleSheet,Animated, TouchableOpacity,Touchable, Dimensions, FlatList, ScrollView} from "react-native";
+import { View, Text, StyleSheet, Animated, TouchableOpacity, Touchable, Dimensions, FlatList, ScrollView } from "react-native";
 import Card from './Card';
 import CardSection from './CardSection';
 import json from '../screens/data2.json'
@@ -18,16 +18,16 @@ class ExpandableComp2 extends Component {
             receipt: []
         }
         this.componentHeight = new Animated.Value(90)
- 
+
         this.OR = this.props.OR
         this.CR = this.props.CR
-    
+
     }
     componentDidMount() {
         //console.log('inside Exapndable page',this.data)
         this.getCustomerReceiptData()
         //console.log('LOOK Receipts Comp2',this.CR,this.OR)
-     
+
     }
     getCustomerReceiptData = () => {
         let jsonData = json
@@ -37,36 +37,36 @@ class ExpandableComp2 extends Component {
         // for(let i=0; i < jsonData.length; i++){
         //     console.log('This is',jsonData[i])
         // }
-        const getLabels = receipts.map( (l) => {
+        const getLabels = receipts.map((l) => {
             let amount = parseInt(l.OB) - parseInt(l.CreditSum) + parseInt(l.DebitSum)
-            if(l.VoucherType != ''){
-                if(l.VoucherType == 'CR'){
-                    l.VoucherName =  'Cash Receipt' 
+            if (l.VoucherType != '') {
+                if (l.VoucherType == 'CR') {
+                    l.VoucherName = 'Cash Receipt'
                     l.ReceiptAmount = amount
                 }
-                if(l.VoucherType == 'QR'){
-                    l.VoucherName =  'Cheque Receipt' 
+                if (l.VoucherType == 'QR') {
+                    l.VoucherName = 'Cheque Receipt'
                     l.ReceiptAmount = amount
                 }
-                if(l.VoucherType == 'BD'){
-                    l.VoucherName =  'Bank Deposit' 
+                if (l.VoucherType == 'BD') {
+                    l.VoucherName = 'Bank Deposit'
                     l.ReceiptAmount = amount
                 }
             }
-            else{
+            else {
                 console.log('There\'s nothing in receipts')
             }
             return l
         })
 
-        this.setState({receipt: receipts})
+        this.setState({ receipt: receipts })
         let post = []
-        const getAmount = receipts.map( (n) => {
+        const getAmount = receipts.map((n) => {
             post.push(n.ReceiptAmount)
         })
         const reducer = (acc, currentValue) => acc + currentValue;
         let recAmount = post.reduce(reducer);
-        this.setState({ReceiptAmount: recAmount})
+        this.setState({ ReceiptAmount: recAmount })
         this.getOtherReceipts()
         //#TODO: merge similiar fields
     }
@@ -75,13 +75,13 @@ class ExpandableComp2 extends Component {
         let data = this.OR
         //let data = jsonData.requestedData.otherReciepts
         let arr = []
-        const getOtherAmount = data.map( (n) => {
+        const getOtherAmount = data.map((n) => {
             let amount = parseInt(n.OB) - parseInt(n.CreditSum) + parseInt(n.DebitSum)
             return arr.push(amount)
         })
         const reducer = (acc, currentValue) => acc + currentValue;
         let otherAmount = arr.reduce(reducer);
-        this.setState({OtherReceiptAmount: otherAmount})
+        this.setState({ OtherReceiptAmount: otherAmount })
         //console.log(arr)
     }
 
@@ -90,66 +90,83 @@ class ExpandableComp2 extends Component {
         this.setState({ collapsed: !this.state.collapsed });
         !this.state.collapsed ? this.onCollapse() : this.onExpand()
 
-      }
-      onExpand = () => {
-        Animated.timing(this.componentHeight,{
+    }
+    onExpand = () => {
+        Animated.timing(this.componentHeight, {
             duration: 1000,
-            toValue: 300,
+            toValue: 200,
         }).start();
-      }
-      onCollapse = () => {
-        Animated.timing(this.componentHeight,{
-            duration: 100,
+    }
+    onCollapse = () => {
+        Animated.timing(this.componentHeight, {
+            duration: 500,
             toValue: 90
         }).start();
-      }
-      static navigationOptions = {
+    }
+    static navigationOptions = {
         header: null
     }
-    
+
     render() {
-       // console.log('in render receipt ',this.state)
-        const Display = this.state.receipt.map( (a, index) => {
-            return(
-                <View>
-                <View key={index} style={styles.horizontalView}>
-            <Text style={styles.textStyle}>{a.VoucherName}</Text>
-            <Text style={styles.textStyle}>{a.ReceiptAmount}</Text>
-        </View>
-        <View style={{ height: 2 }}></View>
-        <Divider style={{ backgroundColor: 'blue' }} />
-        </View>
-            )
-        })
+         //console.log('in render receipt ',this.state)
+        // const Display = this.state.receipt.map((a, index) => {
+        //     return (
+        //         <View>
+        //             <View key={index} style={styles.horizontalView}>
+        //                 <Text style={styles.textStyle}>{a.VoucherName}</Text>
+        //                 <Text style={styles.textStyle}>{a.ReceiptAmount}</Text>
+        //             </View>
+        //             <View style={{ height: 2 }}></View>
+        //             <Divider style={{ backgroundColor: 'gray' }} />
+        //         </View>
+        //     )
+        // })
         return (
-            <Animated.View style={[styles.component ]} >
-                
+            <Animated.View style={[styles.component]} >
+
                 <TouchableOpacity activeOpacity={.9} onPress={this.toggleExpanded}>
-                <View style={{marginBottom: 10}}>
-                <Card style={{borderColor: colors.EXPAND_INNER, shadowColor: colors.EXPAND_INNER}}>
-                    <CardSection style={{padding: 0}}>
-                        <View style={styles.cardHeading}><Text style={styles.title}>{this.props.title}</Text></View>
-                    </CardSection>
-                    </Card>
-                    <Card style={{borderColor: colors.EXPAND_INNER, shadowColor: colors.EXPAND_INNER}}>
-                    <Animated.View style={[styles.inCard, { height : this.componentHeight } ]}>
-                        <View style={{ height: 2 }}></View>
-                        <View style={styles.horizontalView}>
-                            <Text style={styles.textStyle}>Customer Receipt</Text>
-                            <Text style={styles.textStyle}>$ {this.state.ReceiptAmount}</Text>
-                        </View>
-                        <View style={{ height: 2 }}></View>
-                        <View style={styles.horizontalView}>
-                            <Text style={styles.textStyle}>Other Receipt</Text>
-                            <Text style={styles.textStyle}>$ {this.state.OtherReceiptAmount}</Text>
-                        </View>
-                        <View style={{ height: 10 }}></View>
-                        {/* ############ EXPANDABLE SECTION ################### */}
-                       {Display}
-                    
-                        
-                    </Animated.View>
-                    </Card>
+                    <View style={{ marginBottom: 10 }}>
+                        <Card style={{ borderColor: colors.EXPAND_INNER, shadowColor: colors.EXPAND_INNER }}>
+                            <CardSection style={{ padding: 0 }}>
+                                <View style={styles.cardHeading}><Text style={styles.title}>{this.props.title}</Text></View>
+                            </CardSection>
+                        </Card>
+                        <Card style={{ borderColor: colors.EXPAND_INNER, shadowColor: colors.EXPAND_INNER }}>
+                            <Animated.View style={[styles.inCard, { height: this.componentHeight }]}>
+                                <View style={{ height: 2 }}></View>
+                                <View style={styles.horizontalView}>
+                                    <Text style={styles.textStyle}>Customer Receipt</Text>
+                                    <Text style={styles.textStyle}>$ {this.state.ReceiptAmount}</Text>
+                                </View>
+                                <View style={{ height: 2 }}></View>
+                                <View style={styles.horizontalView}>
+                                    <Text style={styles.textStyle}>Other Receipt</Text>
+                                    <Text style={styles.textStyle}>$ {this.state.OtherReceiptAmount}</Text>
+                                </View>
+                                <View style={{ height: 10 }}></View>
+                                {/* ############ EXPANDABLE SECTION ################### */}
+                                <FlatList
+                                    nestedScrollEnabled={true}
+                                    data={this.state.receipt}
+                                    keyExtractor={(i, index) => {
+                                        return index
+                                    }}
+                                    renderItem={(data) => {
+                                        return (<View>
+                                            <View style={styles.horizontalView}>
+                                                <Text style={styles.textStyle}>{data.item.VoucherName}</Text>
+                                                <Text style={styles.textStyle}>{data.item.ReceiptAmount}</Text>
+                                            </View>
+                                            <View style={{ height: 2 }}></View>
+                                            <Divider style={{ backgroundColor: 'gray' }} />
+                                        </View>
+                                        )
+                                    }}
+                                />
+
+
+                            </Animated.View>
+                        </Card>
                     </View>
                 </TouchableOpacity>
             </Animated.View>
@@ -161,10 +178,10 @@ export default ExpandableComp2;
 
 const styles = StyleSheet.create({
     container: {
-       // flex: 1,
+        // flex: 1,
         //alignItems: 'center',
     },
-    component : {
+    component: {
         //backgroundColor: 'gray',
         alignItems: 'center',
         //justifyContent: 'center',
@@ -178,13 +195,13 @@ const styles = StyleSheet.create({
         borderRadius: 6
     },
     textStyle: {
-        fontSize: 17,       
+        fontSize: 17,
         paddingVertical: 5,
     },
     headingTextStyle: {
         fontSize: 18
     },
-    horizontalView: { 
+    horizontalView: {
         flexDirection: 'row',
         paddingLeft: 10,
         paddingRight: 15,
@@ -204,13 +221,13 @@ const styles = StyleSheet.create({
         fontWeight: '300',
         paddingTop: 6,
         marginBottom: 10,
-      },
-      subtitle: {
+    },
+    subtitle: {
         textAlign: 'center',
         fontSize: 19,
         fontWeight: '300',
         textDecorationLine: 'underline',
         //marginBottom: 10,
         marginTop: 10
-      },
+    },
 });

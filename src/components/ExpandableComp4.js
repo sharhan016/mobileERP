@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View,Text,StyleSheet,Animated, TouchableOpacity,Touchable, Dimensions} from "react-native";
 import Card from './Card';
 import CardSection from './CardSection';
-//import json from '../screens/data2.json'
+import { Divider } from 'react-native-elements';
 import BoxInfo from './BoxInfo';
 import colors from "../config/colors";
 
@@ -29,11 +29,12 @@ class ExpandableComp4 extends Component {
 
     getPurchaseExpense = () => {
         let jsonData = this.PE
-        if(jsonData.length > 1){
+        //console.log('PURCHASE EXPENSE',jsonData.length)
+        if(jsonData.length > 0){
             let amount = 0
         const Expense = jsonData.map((d) => {
-            const { TransFullName, PayableAmount, ...rest } = d
-            let expense = [TransFullName, PayableAmount]
+            const { TransFullName, GrandTotal, ...rest } = d
+            let expense = [TransFullName, GrandTotal]
             return expense
         })
         const purchaseExpense = Expense.map((e) => {
@@ -43,10 +44,11 @@ class ExpandableComp4 extends Component {
         let length = purchaseExpense.length - 1
         let expenseAmount = purchaseExpense[length]
         this.setState({Exist: true, PExpense: Expense, PEamount: expenseAmount});
+        console.log('There Exists data in expense')
         }
         else{
             //console.log('Nothing is there in PE')
-            this.setState({Exist: false,PExpense: 'No Data', PEamount: 0});
+            this.setState({Exist: false,PExpense: false , PEamount: 0});
         }
     }
 
@@ -79,7 +81,7 @@ class ExpandableComp4 extends Component {
       onExpand = () => {
         Animated.timing(this.componentHeight,{
             duration: 1000,
-            toValue: 300,
+            toValue: 200,
         }).start();
       }
       onCollapse = () => {
@@ -93,8 +95,20 @@ class ExpandableComp4 extends Component {
     }
     
     render() {
-       //console.log('in render expense',this.state)
-       //key={index}
+        //console.log('state in expense',this.state)
+       const { PExpense } = this.state
+       const Display = PExpense ? PExpense.map( (a, index) => {
+        return(
+            <View>
+            <View key={index} style={styles.horizontalView}>
+        <Text style={styles.textStyle}>{a[0]}</Text>
+        <Text style={styles.textStyle}>{a[1]}</Text>
+    </View>
+    <View style={{ height: 2 }}></View>
+    <Divider style={{ backgroundColor: 'gray' }} />
+    </View>
+        )
+    }) : null
         return (
             <Animated.View style={[styles.component ]} >
                 
@@ -120,6 +134,7 @@ class ExpandableComp4 extends Component {
                         </View>
                         <View style={{ height: 20 }}></View>
                         {/* ############ EXPANDABLE SECTION ################### */}
+                        {Display}
                         {/* {!this.state.collapsed ? <View>
                             {this.state.revenue.map( (e) => 
                                 <BoxInfo subtitle='Maybe' label1={e[0]} amount1={e[1]} /> )}

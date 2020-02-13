@@ -14,15 +14,24 @@ const chartConfig = {
 };
 const screenWidth = Dimensions.get("window").width - 20;
 const data = {
-    labels: ["January", "February", "March", "April", "May", "June",],
+    labels: ["01/02","02/02","03/02","04/02","05/02","06/02","07/02",],
     datasets: [
         {
-            data: [20, 45, 28, 50,  80, 100, 43, 70, 45, 30, 50, 78],
-            color: (opacity = 1) => `rgba(43, 16, 87, ${opacity})`, // optional
-            strokeWidth: 2 // optional
+            data: [20, 45, 28, 50,  40, 80, 43, 70, 45, 30, 50, 78],
+            color: (opacity = 1) => `rgba(6, 87, 3, ${opacity})`, // (green) optional
+            strokeWidth: 3 // optional
         }
     ],
 };
+const item = {
+    datasets: [
+        {
+            data: [50, 65, 48, 80,  70, 90, 63, 40, 85, 50, 20, 58],
+            color: (opacity = 1) => `rgba(219, 11, 42, ${opacity})`, //(red) optional
+            strokeWidth: 2 // optional
+        }
+    ],
+}
 class LineChart2 extends Component {
 
     render() {
@@ -30,6 +39,7 @@ class LineChart2 extends Component {
             <View style={styles.container}>
                 <LineChart
                     data={data}
+                    item={item}
                     width={screenWidth}
                     height={220}
                     yAxisLabel={'$'}
@@ -45,7 +55,7 @@ class LineChart2 extends Component {
                             
                         }
                     }}
-                    bezier
+                    bezier={this.props.bez}
                     style={{
                         marginVertical: 8,
                         borderRadius: 10,
