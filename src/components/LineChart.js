@@ -14,7 +14,7 @@ const chartConfig = {
 };
 const screenWidth = Dimensions.get("window").width - 20;
 const data = {
-    labels: ["01/02","02/02","03/02","04/02","05/02","06/02","07/02",],
+    labels: ["01/02","","03/02","","05/02","","07/02","","07/02","","07/02",""],
     datasets: [
         {
             data: [20, 45, 28, 50,  40, 80, 43, 70, 45, 30, 50, 78],

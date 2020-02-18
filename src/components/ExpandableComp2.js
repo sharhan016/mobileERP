@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, Animated, TouchableOpacity, Touchable, Dimensions, FlatList, ScrollView } from "react-native";
 import Card from './Card';
 import CardSection from './CardSection';
-import json from '../screens/data2.json'
 import BoxInfo from './BoxInfo';
 import colors from "../config/colors";
 import { Divider } from 'react-native-elements';
@@ -30,7 +29,6 @@ class ExpandableComp2 extends Component {
 
     }
     getCustomerReceiptData = () => {
-        let jsonData = json
         let receipts = this.CR
         // let receipts = jsonData.requestedData.customerReciepts
         let amount = 0
@@ -71,9 +69,7 @@ class ExpandableComp2 extends Component {
         //#TODO: merge similiar fields
     }
     getOtherReceipts = () => {
-        let jsonData = json
         let data = this.OR
-        //let data = jsonData.requestedData.otherReciepts
         let arr = []
         const getOtherAmount = data.map((n) => {
             let amount = parseInt(n.OB) - parseInt(n.CreditSum) + parseInt(n.DebitSum)
@@ -108,19 +104,7 @@ class ExpandableComp2 extends Component {
     }
 
     render() {
-         //console.log('in render receipt ',this.state)
-        // const Display = this.state.receipt.map((a, index) => {
-        //     return (
-        //         <View>
-        //             <View key={index} style={styles.horizontalView}>
-        //                 <Text style={styles.textStyle}>{a.VoucherName}</Text>
-        //                 <Text style={styles.textStyle}>{a.ReceiptAmount}</Text>
-        //             </View>
-        //             <View style={{ height: 2 }}></View>
-        //             <Divider style={{ backgroundColor: 'gray' }} />
-        //         </View>
-        //     )
-        // })
+
         return (
             <Animated.View style={[styles.component]} >
 
@@ -149,7 +133,7 @@ class ExpandableComp2 extends Component {
                                     nestedScrollEnabled={true}
                                     data={this.state.receipt}
                                     keyExtractor={(i, index) => {
-                                        return index
+                                        return index.toString()
                                     }}
                                     renderItem={(data) => {
                                         return (<View>

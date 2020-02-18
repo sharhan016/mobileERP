@@ -75,7 +75,7 @@ class AliasPage extends Component {
     }
 
     searchAlias = async () => {
-        let ali = 'ap_lagnuvodb'
+        let ali = 'ap_lagnuvodb' //TODO:
             fetch(api.USER_LOGIN, {
             method: 'POST',
             headers: {

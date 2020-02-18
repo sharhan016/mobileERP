@@ -9,10 +9,7 @@ import { Divider } from 'react-native-elements';
 
 
 const WIDTH = Dimensions.get('screen').width;
-const SR = 'Sales Revenue';
-const TSR = 'Total Sales Revenue';
-const OR = 'Other Revenue';
-const TOR = 'Total Other Revenue';
+
 
 class ExpandablePage extends Component {
     constructor(props) {
@@ -117,15 +114,15 @@ class ExpandablePage extends Component {
                                     nestedScrollEnabled={true}
                                     data={this.state.revenue}
                                     keyExtractor={(i, index) => { 
-                                        return index }}
+                                        return index.toString() }}
                                     renderItem={(data) => {
                                         return (<View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{data.item[0]}</Text>
                                                 <Text style={styles.textStyle}>{data.item[1]}</Text>
                                             </View>
-                                            <View style={{ height: 2 }}></View>
-                                            <Divider style={{ backgroundColor: 'gray' }} />
+                                            {/* <View style={{ height: 1.5 }}></View> */}
+                                            <Divider style={{ backgroundColor: 'gray',marginLeft: 20,marginRight: 20 }} />
                                         </View>
                                         )
                                     }}

@@ -134,7 +134,7 @@ class ExpandableComp3 extends Component {
                             <Text style={styles.textStyle}>Total Payments</Text>
                             <Text style={styles.textStyle}>${this.state.SupplierPaymentAmount}</Text>
                         </View>
-                        <View style={{ height: 2 }}></View>
+                        <View style={{ height: 2 }}></View> 
                         <View style={styles.horizontalView}>
                             <Text style={styles.textStyle}>Other Payments</Text>
                             <Text style={styles.textStyle}>${this.state.OtherPaymentAmount}</Text>
@@ -145,7 +145,7 @@ class ExpandableComp3 extends Component {
                                     nestedScrollEnabled={true}
                                     data={this.state.supplierPayments}
                                     keyExtractor={(i, index) => {
-                                        return index
+                                        return index.toString()
                                     }}
                                     renderItem={(data) => {
                                         return (<View>

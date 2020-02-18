@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
@@ -15,30 +15,34 @@ import PieJS from './PieJS';
 import Line from '../components/Line';
 import LineCT from '../components/LineChart';
 import Spacer from '../components/Spacer';
-import Expandable from '../screens/ExpandablePage'; 
+import Expandable from '../screens/ExpandablePage';
 import Expand2 from '../components/ExpandableComp2';
 import Expand3 from '../components/ExpandableComp3';
 import Expand4 from '../components/ExpandableComp4';
 import Test from './TestPage';
+import CB from '../components/CashBlock';
+import BB from '../components/BankBlock';
+
+const screenWidth = Dimensions.get('screen').width;
 
 class DashboardPage extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             tokenID: '',
-            CashOnBank : '',
-            CashOnHand : '',
-            CashPayable : '',
-            CashReceivable : '',
+            CashOnBank: '',
+            CashOnHand: '',
+            CashPayable: '',
+            CashReceivable: '',
             SalesIncome: [],
-           // OtherRevenue: [],
+            // OtherRevenue: [],
             loaded: false,
             loaded2: false,
-            initial: true
+            initial: false
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         this.getToken()
     }
     static navigationOptions = {
@@ -51,85 +55,84 @@ class DashboardPage extends Component {
         try {
             let token = await AsyncStorage.getItem(api.TOKEN);
             let data = await AsyncStorage.getItem(api.USER_DATA);
-            //var object = JSON.parse(data)
-            this.setState({tokenID: token})
-            //console.log('this is in state',this.state.tokenID)
-            //this.getCurrentMoneyStatus() TODO: change it
+            this.setState({ tokenID: token })
+            //console.log('this is in state', this.state.tokenID)
+            this.getCurrentMoneyStatus()
             this.getDashboardData()
         } catch (error) {
             console.log(error)
         }
     }
-    
+
     getCurrentMoneyStatus = async () => {
 
         let alias = 'ap_lagnuvodb' //TODO: change it later
         let post = {
-            "alias" : alias,
-            "authorization" : this.state.tokenID,
+            "alias": alias,
+            //"authorization": this.state.tokenID,
+            "authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
         }
-        console.log('This is post ',post)
+
         try {
-            await axios.post(api.GET_CASH_VALUES, {} , {headers: post} )
-            .then(response => {
-                console.log('Response For Money Status',response)
-                let res = response.data.requestedData
-                let cashOnBank = res.bankAccountBlock.CashOnBankAmount
-                let cashOnHand = res.cashAccountBlock.CashOnHandAmount
-                let cashPayable = res.payableBlock.PayableAmount 
-                let cashReceivable = res.receivableBlock.ReceivableAmount
-                this.setState({
-                    CashOnBank: cashOnBank,
-                    CashOnHand: cashOnHand,
-                    CashPayable: cashPayable,
-                    CashReceivable: cashReceivable,
-                    loaded: true
+            await axios.post(api.GET_CASH_VALUES, {}, { headers: post })
+                .then(response => {
+                    let res = response.data.requestedData
+                    let cashOnBank = res.bankAccountBlock.CashOnBank_tillnow
+                    let cashOnHand = res.cashAccountBlock.CashOnHand_tillnow
+                    let cashPayable = res.payableBlock.PayableAmount
+                    let cashReceivable = res.receivableBlock.ReceivableAmount
+                    this.setState({
+                        CashOnBank: cashOnBank,
+                        CashOnHand: cashOnHand,
+                        CashPayable: cashPayable,
+                        CashReceivable: cashReceivable,
+                        loaded: true
+                    })
                 })
-                console.log(this.state)
-            })
-            .catch(error => console.log(error))
+
+                .catch(error => console.log(error))
         } catch (error) {
-            console.log('inside catch block',error)
+            console.log('inside catch block', error)
         }
 
     }
     getDashboardData = async () => {
         let ali = 'ap_aldabbousdb' //TODO: change it 
         let post = {
-            "alias" : ali,
-            "authorization" : this.state.tokenID,
+            "alias": ali,
+            "authorization": this.state.tokenID,
         }
         try {
-            await axios.post(api.GET_DASHBOARD_DATA, {} , {headers: post} )
-            .then( res => {
+            await axios.post(api.GET_DASHBOARD_DATA, {}, { headers: post })
+                .then(res => {
+                        let response = res.data.requestedData
+                        let salesIncome = response.salesIncomes
+                        let otherRevenue = response.otherIncomes
+                        let customerReceipt = response.customerReciepts
+                        let otherReceipt = response.otherReciepts
+                        let purchaseExpense = response.purchaseExpenses
+                        let otherExpense = response.otherExpenses
+                        let supplierPayment = response.supplierPayments
+                        let otherPayment = response.otherPayments
+                        let salesCategoryWise = response.sales_CategoryWise
+                        let stockCategoryWise = response.stock_CategoryWise
 
-                let response = res.data.requestedData
+                        this.setState({
+                            SalesIncome: salesIncome,
+                            OtherRevenue: otherRevenue,
+                            CustomerReceipt: customerReceipt,
+                            OtherReceipt: otherReceipt,
+                            PurchaseExpense: purchaseExpense,
+                            OtherExpense: otherExpense,
+                            SupplierPayment: supplierPayment,
+                            OtherPayment: otherPayment,
+                            SalesCategory: salesCategoryWise,
+                            StockCategory: stockCategoryWise,
+                            loaded2: true,
+                            initial: false
+                        })
+                })
 
-                let salesIncome = response.salesIncomes
-                let otherRevenue = response.otherIncomes
-                let customerReceipt = response.customerReciepts
-                let otherReceipt = response.otherReciepts
-                let purchaseExpense = response.purchaseExpenses
-                let otherExpense = response.otherExpenses
-                let supplierPayment = response.supplierPayments
-                let otherPayment = response.otherPayments
-                let salesCategoryWise = response.sales_CategoryWise
-                let stockCategoryWise = response.stock_CategoryWise
-
-                this.setState({
-                    SalesIncome: salesIncome, 
-                    OtherRevenue: otherRevenue, 
-                    CustomerReceipt: customerReceipt,
-                    OtherReceipt: otherReceipt,
-                    PurchaseExpense: purchaseExpense,
-                    OtherExpense: otherExpense,
-                    SupplierPayment: supplierPayment,
-                    OtherPayment: otherPayment,
-                    SalesCategory: salesCategoryWise,
-                    StockCategory: stockCategoryWise,
-                    loaded2: true,
-                    initial: false})
-            })
         } catch (error) {
             console.log(error)
         }
@@ -138,21 +141,42 @@ class DashboardPage extends Component {
     }
 
     render() {
-       // console.log('In Dashboard Render',this.state)
+        //console.log('In Dashboard Render',this.state)
+        const { loaded, loaded2 } = this.state
         const initialLoader = <ActivityIndicator
-        animating={this.state.initial}
-        color={colors.HEADER_BLUE} size="small" />
+            animating={this.state.initial}
+            color={colors.HEADER_BLUE} size="small" />
+        const Report = <View>
+            <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} />
+            <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt} />
+            <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} />
+            <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense} />
+            <View style={{ height: 20 }}></View>
+            <Card ><PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} /></Card>
+            <View style={{ height: 20 }}></View>
+            <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card>
+        </View>
+        const cashBlock = <View>
+            <View style={{ flexDirection: 'row' }}>
+                <Info line2='Receivable' amount={this.state.CashReceivable} />
+                <Info line2='Payable' amount={this.state.CashPayable} />
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+            <CB data={this.state.CashOnHand}/>
+            <BB data={this.state.CashOnBank} />
+            </View>
+        </View>
         return (
-            <View 
-            style={styles.container}
-            onStartShouldSetResponderCapture={() => {
-                this.setState({ enableScrollViewScroll: true });
-            }}
+            <View
+                style={styles.container}
+                // onStartShouldSetResponderCapture={() => {
+                //     this.setState({ enableScrollViewScroll: true });
+                // }}
             >
                 <Header heading='Dashboard' onPress={() => this.props.navigation.openDrawer()} />
 
-                <ScrollView 
-                scrollEnabled={this.state.enableScrollViewScroll}
+                <ScrollView
+                   // scrollEnabled={this.state.enableScrollViewScroll}
                 >
                     <StatusBar barStyle="light-content" hidden={false} backgroundColor={colors.BGStatus} />
                     <View style={styles.container}>
@@ -161,50 +185,41 @@ class DashboardPage extends Component {
                             <RoundNav iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
                             <RoundNav iconName='clipboard' heading='Orders' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
                         </View>
+
+                        {loaded ? cashBlock : null}
                         {/* <View style={styles.topNav}>
                             <RoundNav iconName='activity' heading='Tasks' iconStyle={{ backgroundColor: '#d5e8d5', borderColor: '#aecbaa' }} />
                             <RoundNav iconName='activity' heading='Sales' iconStyle={{ backgroundColor: '#f9f1cd', borderColor: '#e4d594' }} />
                             <RoundNav iconName='activity' heading='Products' iconStyle={{ backgroundColor: '#f0c8b4', borderColor: '#b2856d' }} />
                         </View> */}
-                         {initialLoader}
-
+                        {initialLoader}
+                        <View style={{ height: 40 }}></View>
                         {/* <View style={{ height: 200, flexDirection: 'column', justifyContent: 'space-around' }}>
                         <View style={{ height: 5 }}></View>
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
                         <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                        </View> */}
-                    
-                    {this.state.loaded2 ? <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} /> : null }
+                    </View> 
+                    */}
+                        {loaded2 ? Report : null}
 
-                    {this.state.loaded2 ? <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt}  /> : null }
-                 
-                      
-                   
-                     {this.state.loaded2 ? <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} /> : null }
-                     
-                    {this.state.loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null } 
+
+                        {/* {loaded2 ? <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} /> : null }
+                    {loaded2 ? <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt}  /> : null }
+                    {loaded2 ? <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} /> : null }
+                    {loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null } 
                     <View style={{ height: 20 }}></View>
-                    {this.state.loaded2 ? <Card ><PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} /></Card> : null}
+                    {loaded2 ? <Card ><PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} /></Card> : null}
                     <View style={{ height: 20 }}></View>
-                    {this.state.loaded2 ? <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card> : null}
+                    {loaded2 ? <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card> : null}
                     <View style={{ height: 20 }}></View>
-                     {this.state.loaded2 ? <LineCT /> : null}
+                     {loaded2 ? <LineCT /> : null}
                      <View style={{ height: 10 }}></View>
-                     {this.state.loaded2 ? <LineCT bez={true} /> : null }
-                    <View style={{ height: 40 }}></View>
-                    {/* <Line />
-                    
-                     <Line />
+                     {loaded2 ? <LineCT bez={true} /> : null } */}
 
-                    <View style={styles.reportView}>
-                        <Report />
-                        
-                        <View style={{ height: 10 }}></View>
-                        
+                        <View style={{ height: 40 }}></View>
 
-                    </View> */}
                     </View>
                 </ScrollView>
             </View>
@@ -216,7 +231,8 @@ export default DashboardPage;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.WHITISH,
-        flex: 1
+        flex: 1,
+        width: screenWidth
     },
     madding: {
         padding: 5,

@@ -8,7 +8,8 @@ class App extends Component {
   state = { }
   render() {
     console.disableYellowBox = true;
-    return <Router /> }
+    return <Router /> 
+  }
 }
 
 const styles = StyleSheet.create({
