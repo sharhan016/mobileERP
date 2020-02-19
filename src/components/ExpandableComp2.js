@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
         borderRadius: 6
     },
     textStyle: {
-        fontSize: 17,
+        fontSize: 15,
         paddingVertical: 5,
     },
     headingTextStyle: {
@@ -194,13 +194,13 @@ const styles = StyleSheet.create({
     },
     cardHeading: {
         alignItems: 'center',
-        width: WIDTH - 50,
+        width: WIDTH - 20,
         backgroundColor: colors.EXPAND_TITLE,         // color
         borderRadius: 6
     },
     title: {
         textAlign: 'center',
-        fontSize: 22,
+        fontSize: 18,
         color: 'white',
         fontWeight: '300',
         paddingTop: 6,

@@ -61,7 +61,7 @@ export default class PieJS extends React.PureComponent {
       style={styles.pieContainer} >
           <TouchableOpacity onPress={this.animate}
           style={{  alignItems: 'center'  }} >
-          <Text style={{ fontSize: 30 }}>Department Wise</Text>
+          <Text style={{ fontSize: 25 }}>Department Wise</Text>
           <Text style={{ fontSize: 18 }}>{this.props.text} Value</Text>
         </TouchableOpacity>
         <Pie

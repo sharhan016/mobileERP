@@ -121,13 +121,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#c9dcfc'
     },
     headingText: {
-        fontSize: 17,
+        fontSize: 14,
         color: '#2c2d2e',
         marginTop: 5,
     },
     valueText: {
         paddingTop: 5,
-        fontSize: 17,
+        fontSize: 16,
         color: '#3168cc',
         fontWeight: '700'
     },

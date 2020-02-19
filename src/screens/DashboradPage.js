@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar,
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
+import moment from 'moment';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import CardSection from '../components/CardSection';
@@ -29,6 +30,9 @@ class DashboardPage extends Component {
 
     constructor(props) {
         super(props);
+        let today = moment();
+        let day = today.format("DD-MM-YYYY")
+        let lweek = moment(day, "DD-MM-YYYY").subtract(7, 'days').format("DD-MM-YYYY");
         this.state = {
             tokenID: '',
             CashOnBank: '',
@@ -36,10 +40,12 @@ class DashboardPage extends Component {
             CashPayable: '',
             CashReceivable: '',
             SalesIncome: [],
+            todayDate: day,
+            beforeDate: lweek,
             // OtherRevenue: [],
             loaded: false,
             loaded2: false,
-            initial: false
+            initial: true
         }
     }
     componentDidMount() {
@@ -59,6 +65,7 @@ class DashboardPage extends Component {
             //console.log('this is in state', this.state.tokenID)
             this.getCurrentMoneyStatus()
             this.getDashboardData()
+            this.getLineData()
         } catch (error) {
             console.log(error)
         }
@@ -136,87 +143,92 @@ class DashboardPage extends Component {
         } catch (error) {
             console.log(error)
         }
-
-
+    }
+    getLineData = async () => {
+        let alias = 'ap_lagnuvodb' //TODO: change it later
+        const { todayDate, beforeDate } = this.state
+        let body = {
+            "dateFrom": beforeDate,
+            "dateTo": todayDate
+        }
+        //console.log('BODY',body)
+        let post = {
+            "alias": alias,
+            //"authorization": this.state.tokenID,
+            "authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
+        }
+        try {
+            await axios.post(api.GET_LINE_DATA, body, { headers: post } )
+            .then( res => {
+                let response = res.data.requestedData
+                this.setState({
+                    LineData: response
+                })
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     render() {
         //console.log('In Dashboard Render',this.state)
-        const { loaded, loaded2 } = this.state
+        const { loaded, loaded2, initial, SalesIncome, OtherRevenue,CustomerReceipt, OtherReceipt, SupplierPayment, OtherPayment, PurchaseExpense, OtherExpense, SalesCategory, StockCategory, CashReceivable, CashPayable, CashOnBank, CashOnHand  } = this.state
+        const { loaderStyle, container, topNav   } = styles
         const initialLoader = <ActivityIndicator
-            animating={this.state.initial}
+            animating={initial}
+            style={loaderStyle}
             color={colors.HEADER_BLUE} size="small" />
         const Report = <View>
-            <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} />
-            <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt} />
-            <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} />
-            <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense} />
+            <Expandable title='Revenues' SI={SalesIncome} OR={OtherRevenue} />
+            <Expand2 title='Receipts' CR={CustomerReceipt} OR={OtherReceipt} />
+            <Expand3 title='Payments' SP={SupplierPayment} OP={OtherPayment} />
+            <Expand4 title='Expenses' PE={PurchaseExpense} OE={OtherExpense} />
             <View style={{ height: 20 }}></View>
-            <Card ><PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} /></Card>
+            <Card ><PieJS text='Sales' execute={1} dashData={SalesCategory} /></Card>
             <View style={{ height: 20 }}></View>
-            <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card>
+            <Card ><PieJS text='Stock' execute={2} dashData={StockCategory} /></Card>
         </View>
         const cashBlock = <View>
             <View style={{ flexDirection: 'row' }}>
-                <Info line2='Receivable' amount={this.state.CashReceivable} />
-                <Info line2='Payable' amount={this.state.CashPayable} />
+                <Info line2='Receivable' amount={CashReceivable} />
+                <Info line2='Payable' amount={CashPayable} />
             </View>
             <View style={{ flexDirection: 'row' }}>
-            <CB data={this.state.CashOnHand}/>
-            <BB data={this.state.CashOnBank} />
+            <CB data={CashOnHand}/>
+            <BB data={CashOnBank} /> 
             </View>
         </View>
         return (
-            <View
-                style={styles.container}
-                // onStartShouldSetResponderCapture={() => {
-                //     this.setState({ enableScrollViewScroll: true });
-                // }}
-            >
+            <View style={container} >
                 <Header heading='Dashboard' onPress={() => this.props.navigation.openDrawer()} />
 
-                <ScrollView
-                   // scrollEnabled={this.state.enableScrollViewScroll}
-                >
+                <ScrollView >
                     <StatusBar barStyle="light-content" hidden={false} backgroundColor={colors.BGStatus} />
-                    <View style={styles.container}>
-                        <View style={styles.topNav}>
+                    <View style={container}>
+                        <View style={topNav}>
                             <RoundNav onPress={this.openReport} iconName='activity' heading='Analytics' iconStyle={{ backgroundColor: '#c9dcfc', borderColor: '#4f91ff' }} />
                             <RoundNav iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
                             <RoundNav iconName='clipboard' heading='Orders' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
                         </View>
-
-                        {loaded ? cashBlock : null}
-                        {/* <View style={styles.topNav}>
+                        {/* <View style={topNav}>
                             <RoundNav iconName='activity' heading='Tasks' iconStyle={{ backgroundColor: '#d5e8d5', borderColor: '#aecbaa' }} />
                             <RoundNav iconName='activity' heading='Sales' iconStyle={{ backgroundColor: '#f9f1cd', borderColor: '#e4d594' }} />
                             <RoundNav iconName='activity' heading='Products' iconStyle={{ backgroundColor: '#f0c8b4', borderColor: '#b2856d' }} />
                         </View> */}
-                        {initialLoader}
+                        {loaded ? cashBlock : null}
+                        
+                        <View style={{ height: 20 }}></View>
+                        {initial ? initialLoader : null}
                         <View style={{ height: 40 }}></View>
-                        {/* <View style={{ height: 200, flexDirection: 'column', justifyContent: 'space-around' }}>
-                        <View style={{ height: 5 }}></View>
-                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                        <Info line1='Cash' line2='Inhand' amount='$32,375' />
-                    </View> 
-                    */}
+                      
                         {loaded2 ? Report : null}
 
 
-                        {/* {loaded2 ? <Expandable title='Revenues' SI={this.state.SalesIncome} OR={this.state.OtherRevenue} /> : null }
-                    {loaded2 ? <Expand2 title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt}  /> : null }
-                    {loaded2 ? <Expand3 title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} /> : null }
-                    {loaded2 ? <Expand4 title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense}  /> : null } 
-                    <View style={{ height: 20 }}></View>
-                    {loaded2 ? <Card ><PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} /></Card> : null}
-                    <View style={{ height: 20 }}></View>
-                    {loaded2 ? <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card> : null}
-                    <View style={{ height: 20 }}></View>
-                     {loaded2 ? <LineCT /> : null}
+                        
+                    
+                     {loaded2 ? <LineCT lineData={this.state.LineData} /> : null}
                      <View style={{ height: 10 }}></View>
-                     {loaded2 ? <LineCT bez={true} /> : null } */}
+                     {loaded2 ? <LineCT lineData={this.state.LineData} bez={true} /> : null }
 
                         <View style={{ height: 40 }}></View>
 
@@ -234,116 +246,13 @@ const styles = StyleSheet.create({
         flex: 1,
         width: screenWidth
     },
-    madding: {
-        padding: 5,
-        marginTop: 10,
-        marginLeft: 10,
-        fontSize: 20,
-        fontWeight: "500",
-        //textDecorationLine: 'underline'
-    },
-    cardContainer: {
-        justifyContent: 'space-evenly',
-        backgroundColor: 'transparent',
-        shadowColor: '#000',
-        shadowOffset: { width: 1, height: 2 },
-        elevation: 1,
-        shadowOpacity: 0.4,
-        shadowRadius: 10,
-        padding: 2,
-        marginLeft: 10,
-        marginRight: 10,
-        paddingBottom: 10,
-        borderRadius: 8
-    },
-    textHeading: {
-        textAlign: 'center',
-        fontSize: 20
-    },
-    textAmount: {
-        fontSize: 20,
-        fontWeight: '500',
-        textAlign: 'center',
-        color: 'green'
-    },
-    textPayment: {
-        fontSize: 20,
-        fontWeight: '500',
-        textAlign: 'center',
-        color: 'red'
-    },
-    buttonStyle: {
-        height: 40,
-        //flex:1,
-        //margin:20,
-        margin: 10,
-        marginRight: 20,
-        flexDirection: 'row',
-        //alignItems: 'flex-end',
-        //justifyContent: 'flex-end',
-        backgroundColor: colors.DODGER_BLUE
-    },
-    buttonText: {
-        textAlign: 'center',
-        fontSize: 15
-    },
-    moreContainer: {
-        flex: 1,
-        //flexDirection: 'row',
-        alignItems: 'center',
-        color: 'blue',
-    },
-    pie: {
-        //flexDirection: 'row',
-        //justifyContent: 'space-between'
-        margin: 15
-    },
-    pieContainer: {
-        flexDirection: 'row',
-    },
     topNav: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
     },
-    singleItem: {
-        padding: 10,
-        justifyContent: 'space-evenly'
-    },
-    reportView: {
-        marginRight: 2,
-        marginLeft: 2,
-        //margin: 10,
-        //padding: 5
-    },
-    headerContainer: {
-        backgroundColor: '#092d5f',
-        width: "100%",
-        flexDirection: 'row',
-        height: 60,
-        paddingTop: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.4,
-        shadowRadius: 10,
-        elevation: 2,
-        //position: 'absolute',
-        //top: 0
-    },
-    leftIcon: {
-        justifyContent: 'flex-start'
-    },
-    textStyle: {
-        fontSize: 20,
-        paddingBottom: 20,
-        color: 'white',
-        fontWeight: '600'
-    },
-    headerText: {
-        alignItems: 'center',
+    loaderStyle: {
         justifyContent: 'center',
-        paddingBottom: 10,
-        height: 60,
-        paddingRight: 20
-
+        alignItems: 'center',
+        marginTop: 50
     }
 });

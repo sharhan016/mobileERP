@@ -30,7 +30,7 @@ export default Info;
 const styles = StyleSheet.create({
     container: {
         paddingTop: 5,
-        height: 60,
+        height: 53,
         paddingBottom: 5,
         width: WIDTH / 2,
         paddingRight: 3,
@@ -47,14 +47,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#c9dcfc'
 
     },
+
     headingText: {
-        fontSize: 16,
+        fontSize: 14,
         color: '#2c2d2e',
-        //paddingTop: 10,
+        marginTop: 5,
     },
     valueText: {
-        //paddingTop: 5,
-        fontSize: 17,
+        paddingTop: 5,
+        fontSize: 16,
         color: '#3168cc',
         fontWeight: '700'
     },

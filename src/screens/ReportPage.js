@@ -331,7 +331,7 @@ class ReportPage extends Component {
         </View>
         return (
             <View style={styles.container} >
-                <Header heading='Analytics' onPress={() => this.props.navigation.openDrawer()} />
+                <Header back={true} heading='Analytics' onPress={() => this.props.navigation.goBack()} />
                 <View style={styles.radioField}>
                     <RadioForm
                         radio_props={radio_props}

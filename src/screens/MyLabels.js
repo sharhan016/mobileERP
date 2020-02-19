@@ -17,8 +17,8 @@ export default function MyLabels({ data, focus }) {
               <View style={styles.listContainer} >
            <View style={[styles.dot, { backgroundColor: data.item.color }]} />
             <View style={styles.listItem}>
-            <Text>{data.item.title}</Text>
-            <Text>{data.item.help}</Text>
+            <Text style={styles.textStyle} >{data.item.title}</Text>
+            <Text style={styles.textStyle} >{data.item.help}</Text>
             </View>
           </View>
           </TouchableOpacity>
@@ -59,5 +59,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     //justifyContent: 'center',
+  },
+  textStyle: {
+    fontSize: 12
   }
 });

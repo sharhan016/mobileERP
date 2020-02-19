@@ -7,11 +7,18 @@ import colors from '../config/colors';
 
 const Header = (props) => {
     const { textStyle, container,leftIcon, headerText } = styles;
+    let icon = {}
+    if(props.back == true){
+        icon = <Ionicons style= {{paddingLeft:15}} name= "md-arrow-back" size={30} color={colors.WHITE} />
+    }
+    else{
+        icon = <Ionicons style= {{paddingLeft:15}} name= "md-menu" size={30} color='white' />
+    }
     return(
         <View style={container}>
             <View style={leftIcon}>
             <TouchableOpacity onPress={props.onPress}>
-            <Ionicons style= {{paddingLeft:15}} name= "md-menu" size={30} color='white' />
+            {icon}
             </TouchableOpacity>
             </View>
             <View style={{paddingHorizontal: 15}}></View>
@@ -40,7 +47,8 @@ const styles = StyleSheet.create({
         //top: 0
     },
     leftIcon: {
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        paddingTop: 2
     },
     textStyle: {
         fontSize: 20,

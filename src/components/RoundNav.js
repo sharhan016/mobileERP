@@ -24,7 +24,7 @@ export default RoundNav;
 const styles = StyleSheet.create({
     container: {height: 120, width: 100,padding: 15, margin: 10, alignItems: 'center', justifyContent: 'center',},
     image: {width: 50, height: 50, borderRadius: 40, borderWidth: 2, borderColor: 'green'},
-    text: {paddingTop: 10, textAlign: 'center'},
+    text: {paddingTop: 10, textAlign: 'center', fontSize: 12},
     inputIcon: {backgroundColor: 'gray', padding: 20, borderRadius: 40, borderWidth: 3 }
 });
 
