@@ -13,7 +13,7 @@ const chartConfig = {
     strokeWidth: 2, // optional, default 3
     barPercentage: 0.5
 };
-const screenWidth = Dimensions.get("window").width - 5;
+const screenWidth = Dimensions.get("window").width - 20;
 
 //let json = jsonData.requestedData //TODO: modify here with props
 //let json = []
@@ -24,11 +24,12 @@ class LineChart2 extends Component {
 
     constructor(props) {
         super(props);
-        console.log('PROPS', this.props)
-        const json = this.props.lineData
+        const json = jsonData.requestedData
+        // const json = this.props.lineData
         this.labels = json.Labels
-        this.sale = json.SalesData
-        this.purchase = json.PurchaseData
+        this.sale = [0, ...json.SalesData]
+        this.purchase = [0,...json.PurchaseData]
+        
         
     }
 
@@ -42,7 +43,8 @@ class LineChart2 extends Component {
             datasets: [
                 {
                     data: saleData,
-                    color: (opacity = 1) => `rgba(6, 87, 3, ${opacity})`, // (green) optional
+                    color: (opacity = 0) => `rgb(16, 61, 133)`,
+                    // color: (opacity = 0) => `rgba(0, 128, 0, ${opacity})`, // (green) optional
                     strokeWidth: 2 // optional
                 }
             ],
@@ -51,8 +53,9 @@ class LineChart2 extends Component {
             datasets: [
                 {
                     data: purchaseData,
-                    color: (opacity = 1) => `rgba(219, 11, 42, ${opacity})`, //(red) optional
-                    strokeWidth: 2 // optional
+                    //color: (opacity = 0) => `rgb(219, 11, 42)`,
+                    color: (opacity = 0) => `rgb(224, 11, 11, ${opacity})`, //(red) optional
+                    strokeWidth: 4 // optional
                 }
             ],
         }
@@ -65,11 +68,13 @@ class LineChart2 extends Component {
                     height={220}
                     yAxisLabel={'$'}
                     chartConfig={{
-                        backgroundColor: 'black',
-                        backgroundGradientFrom: '#e4e9f2',
+                        backgroundColor: 'white',
+                        backgroundGradientFrom: '#eff0f2',
+                        //backgroundGradientFrom: '#e4e9f2',
                         labelColor: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
-                        backgroundGradientTo: '#525050',
-                        decimalPlaces: 2, // optional, defaults to 2dp
+                        //backgroundGradientTo: '#092d5f',
+                        backgroundGradientTo: '#c9dcfc',
+                        decimalPlaces: 0, // optional, defaults to 2dp
                         color: (opacity = 1) => `rgba(183, 208, 247, ${opacity})`, // color inisde line portion
                         style: {
                             borderRadius: 14,

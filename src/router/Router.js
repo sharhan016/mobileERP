@@ -7,7 +7,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import Feather from 'react-native-vector-icons/Feather';
 import LoginPage from '../screens/LoginPage';
 import AliasPage from '../screens/AliasPage';
-import DashboardPage from '../screens/DashboradPage';
+import DashboardPage from '../screens/DashboardPage';
 import AuthScreen from '../screens/AuthScreen';
 import ReportPage from '../screens/ReportPage';
 import Sidebar from '../components/SideBar';

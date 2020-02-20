@@ -32,7 +32,7 @@ class DashboardPage extends Component {
         super(props);
         let today = moment();
         let day = today.format("DD-MM-YYYY")
-        let lweek = moment(day, "DD-MM-YYYY").subtract(7, 'days').format("DD-MM-YYYY");
+        let lweek = moment(day, "DD-MM-YYYY").subtract(5, 'days').format("DD-MM-YYYY");
         this.state = {
             tokenID: '',
             CashOnBank: '',
@@ -45,6 +45,7 @@ class DashboardPage extends Component {
             // OtherRevenue: [],
             loaded: false,
             loaded2: false,
+            loaded3: false,
             initial: true
         }
     }
@@ -64,8 +65,8 @@ class DashboardPage extends Component {
             this.setState({ tokenID: token })
             //console.log('this is in state', this.state.tokenID)
             this.getCurrentMoneyStatus()
-            this.getDashboardData()
             this.getLineData()
+            this.getDashboardData()
         } catch (error) {
             console.log(error)
         }
@@ -79,7 +80,7 @@ class DashboardPage extends Component {
             //"authorization": this.state.tokenID,
             "authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
         }
-
+        console.log('getCurrentMoneyStatus is called')
         try {
             await axios.post(api.GET_CASH_VALUES, {}, { headers: post })
                 .then(response => {
@@ -95,8 +96,8 @@ class DashboardPage extends Component {
                         CashReceivable: cashReceivable,
                         loaded: true
                     })
+                    console.log('Finished calling MoneyStatus contents')
                 })
-
                 .catch(error => console.log(error))
         } catch (error) {
             console.log('inside catch block', error)
@@ -109,6 +110,7 @@ class DashboardPage extends Component {
             "alias": ali,
             "authorization": this.state.tokenID,
         }
+        console.log('getDashboardData is called')
         try {
             await axios.post(api.GET_DASHBOARD_DATA, {}, { headers: post })
                 .then(res => {
@@ -138,6 +140,7 @@ class DashboardPage extends Component {
                             loaded2: true,
                             initial: false
                         })
+                        console.log('Finished calling dashboard contents')
                 })
 
         } catch (error) {
@@ -145,6 +148,7 @@ class DashboardPage extends Component {
         }
     }
     getLineData = async () => {
+        console.log('getLineData is called')
         let alias = 'ap_lagnuvodb' //TODO: change it later
         const { todayDate, beforeDate } = this.state
         let body = {
@@ -162,8 +166,10 @@ class DashboardPage extends Component {
             .then( res => {
                 let response = res.data.requestedData
                 this.setState({
-                    LineData: response
+                    LineData: response,
+                    loaded3: true
                 })
+                console.log('Finished calling LineChart contents')
             })
         } catch (error) {
             console.log(error)
@@ -172,8 +178,8 @@ class DashboardPage extends Component {
 
     render() {
         //console.log('In Dashboard Render',this.state)
-        const { loaded, loaded2, initial, SalesIncome, OtherRevenue,CustomerReceipt, OtherReceipt, SupplierPayment, OtherPayment, PurchaseExpense, OtherExpense, SalesCategory, StockCategory, CashReceivable, CashPayable, CashOnBank, CashOnHand  } = this.state
-        const { loaderStyle, container, topNav   } = styles
+        const { loaded, loaded2, loaded3, initial, LineData, SalesIncome, OtherRevenue,CustomerReceipt, OtherReceipt, SupplierPayment, OtherPayment, PurchaseExpense, OtherExpense, SalesCategory, StockCategory, CashReceivable, CashPayable, CashOnBank, CashOnHand  } = this.state
+        const { loaderStyle, container, topNav,textStyle   } = styles
         const initialLoader = <ActivityIndicator
             animating={initial}
             style={loaderStyle}
@@ -225,10 +231,16 @@ class DashboardPage extends Component {
 
 
                         
-                    
-                     {loaded2 ? <LineCT lineData={this.state.LineData} /> : null}
-                     <View style={{ height: 10 }}></View>
-                     {loaded2 ? <LineCT lineData={this.state.LineData} bez={true} /> : null }
+                        {/* <View style={{ height: 20 }}></View>
+                     {loaded2 ? <Card>
+                         <Text style={textStyle}>Heading</Text>
+                         <LineCT lineData={this.state.LineData} />
+                         </Card> : null} */}
+                     <View style={{ height: 20 }}></View>
+                     {loaded3 ? <Card>
+                         <Text style={textStyle}>Sales and Purchase</Text>
+                         <LineCT lineData={LineData} bez={true} />
+                         </Card> : null}
 
                         <View style={{ height: 40 }}></View>
 
@@ -254,5 +266,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 50
+    },
+    textStyle: {
+        textAlign: 'center',
+        fontSize: 22,
+        width: screenWidth - 10,
+        paddingVertical: 10
     }
 });
