@@ -81,13 +81,8 @@ class CashBlock extends Component {
                                 )
                             }}
                             />
-
-                              
-                
-                            
-                            </Animated.View>
-               
-                            </View>
+                            </Animated.View>            
+                           </View>
                 </TouchableOpacity>
             </Animated.View>
         );
@@ -141,8 +136,6 @@ const styles = StyleSheet.create({
     },
     horizontalView: { 
         flexDirection: 'row',
-        //paddingLeft: 10,
-        //paddingRight: 15,
         paddingVertical: 5,
         justifyContent: 'space-around'
     },

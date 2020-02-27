@@ -8,6 +8,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import LoginPage from '../screens/LoginPage';
 import AliasPage from '../screens/AliasPage';
 import DashboardPage from '../screens/DashboardPage';
+import CustomerPage from '../screens/CustomerPage';
 import AuthScreen from '../screens/AuthScreen';
 import ReportPage from '../screens/ReportPage';
 import Sidebar from '../components/SideBar';
@@ -31,7 +32,8 @@ const LoginStack = createStackNavigator({
 
 const DashStack = createStackNavigator({
     Dashboard: DashboardPage,
-    Report: ReportPage
+    Report: ReportPage,
+    Customer: CustomerPage
 });
 
 const AppDrawer = createDrawerNavigator({

@@ -11,6 +11,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
+import Card from '../components/Card';
 import PieJS from './PieJS';
 import Revenue from '../screens/ExpandablePage';
 import Receipt from '../components/ExpandableComp2';
@@ -74,7 +75,7 @@ class ReportPage extends Component {
             this.setState({ tokenID: token })
             console.log('this is in state', this.state.tokenID)
             //this.getCurrentMoneyStatus()
-            this.getDashboardData()
+            //this.getDashboardData()
         } catch (error) {
             console.log(error)
         }
@@ -289,9 +290,9 @@ class ReportPage extends Component {
         //console.log('In DateSection Render', this.state)
         const { value, date, lastWeekdate, weekday, currentMonth, customStartDate, customEndDate } = this.state;
         const DatePicker = <View style={styles.dateContainer}>
-            <TouchableOpacity onPress={this.decrementDate}><Ionicons name="md-arrow-dropleft" size={25} color={'black'} /></TouchableOpacity>
+            <TouchableOpacity onPress={this.decrementDate}><Ionicons name="md-arrow-dropleft-circle" size={25} color={'black'} /></TouchableOpacity>
             <TouchableOpacity onPress={this.showDatePicker3} ><Text style={styles.dateText}> {date} </Text></TouchableOpacity>
-            <TouchableOpacity onPress={this.incrementDate}><Ionicons name="md-arrow-dropright" size={25} color={'black'} /></TouchableOpacity>
+            <TouchableOpacity onPress={this.incrementDate}><Ionicons name="md-arrow-dropright-circle" size={25} color={'black'} /></TouchableOpacity>
         </View>
         const WeekPicker = <View style={styles.dateContainer}>
             <TouchableOpacity onPress={this.lastWeek}><Ionicons name="md-arrow-dropleft-circle" size={25} color={'black'} /></TouchableOpacity>
@@ -299,9 +300,9 @@ class ReportPage extends Component {
             <TouchableOpacity onPress={this.nextWeek}><Ionicons name="md-arrow-dropright-circle" size={25} color={'black'} /></TouchableOpacity>
         </View>
         const MonthPicker = <View style={styles.dateContainer}>
-            <TouchableOpacity onPress={this.lastMonth}><Ionicons name="md-arrow-dropleft" size={28} color={'black'} /></TouchableOpacity>
+            <TouchableOpacity onPress={this.lastMonth}><Ionicons name="md-arrow-dropleft-circle" size={28} color={'black'} /></TouchableOpacity>
             <Text style={styles.dateText}>  {currentMonth}</Text>
-            <TouchableOpacity onPress={this.nextMonth}><Ionicons name="md-arrow-dropright" size={28} color={'black'} /></TouchableOpacity>
+            <TouchableOpacity onPress={this.nextMonth}><Ionicons name="md-arrow-dropright-circle" size={28} color={'black'} /></TouchableOpacity>
         </View>
         const CustomPicker = <View style={styles.customContainer}>
             <Text style={{ fontSize: 14, color: 'gray' }} >From:</Text>
@@ -326,8 +327,10 @@ class ReportPage extends Component {
             <Receipt title='Receipts' CR={this.state.CustomerReceipt} OR={this.state.OtherReceipt} />
             <Payment title='Payments' SP={this.state.SupplierPayment} OP={this.state.OtherPayment} />
             <Expense title='Expenses' PE={this.state.PurchaseExpense} OE={this.state.OtherExpense} />
-            <PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} />
-            <PieJS text='Stock' execute={2} dashData={this.state.StockCategory} />
+            <View style={{ height: 20 }}></View>
+            <Card ><PieJS text='Sales' execute={1} dashData={this.state.SalesCategory} /></Card>
+            <View style={{ height: 20 }}></View>
+            <Card ><PieJS text='Stock' execute={2} dashData={this.state.StockCategory} /></Card>
         </View>
         return (
             <View style={styles.container} >

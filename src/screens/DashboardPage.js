@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator,ToastAndroid, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
@@ -58,6 +58,9 @@ class DashboardPage extends Component {
     openReport = () => {
         this.props.navigation.navigate('Report')
     }
+    openCustomer = () => {
+        this.props.navigation.navigate('Customer')
+    }
     getToken = async () => {
         try {
             let token = await AsyncStorage.getItem(api.TOKEN);
@@ -65,8 +68,8 @@ class DashboardPage extends Component {
             this.setState({ tokenID: token })
             //console.log('this is in state', this.state.tokenID)
             this.getCurrentMoneyStatus()
-            this.getLineData()
             this.getDashboardData()
+            this.getLineData()
         } catch (error) {
             console.log(error)
         }
@@ -114,33 +117,33 @@ class DashboardPage extends Component {
         try {
             await axios.post(api.GET_DASHBOARD_DATA, {}, { headers: post })
                 .then(res => {
-                        let response = res.data.requestedData
-                        let salesIncome = response.salesIncomes
-                        let otherRevenue = response.otherIncomes
-                        let customerReceipt = response.customerReciepts
-                        let otherReceipt = response.otherReciepts
-                        let purchaseExpense = response.purchaseExpenses
-                        let otherExpense = response.otherExpenses
-                        let supplierPayment = response.supplierPayments
-                        let otherPayment = response.otherPayments
-                        let salesCategoryWise = response.sales_CategoryWise
-                        let stockCategoryWise = response.stock_CategoryWise
+                    let response = res.data.requestedData
+                    let salesIncome = response.salesIncomes
+                    let otherRevenue = response.otherIncomes
+                    let customerReceipt = response.customerReciepts
+                    let otherReceipt = response.otherReciepts
+                    let purchaseExpense = response.purchaseExpenses
+                    let otherExpense = response.otherExpenses
+                    let supplierPayment = response.supplierPayments
+                    let otherPayment = response.otherPayments
+                    let salesCategoryWise = response.sales_CategoryWise
+                    let stockCategoryWise = response.stock_CategoryWise
 
-                        this.setState({
-                            SalesIncome: salesIncome,
-                            OtherRevenue: otherRevenue,
-                            CustomerReceipt: customerReceipt,
-                            OtherReceipt: otherReceipt,
-                            PurchaseExpense: purchaseExpense,
-                            OtherExpense: otherExpense,
-                            SupplierPayment: supplierPayment,
-                            OtherPayment: otherPayment,
-                            SalesCategory: salesCategoryWise,
-                            StockCategory: stockCategoryWise,
-                            loaded2: true,
-                            initial: false
-                        })
-                        console.log('Finished calling dashboard contents')
+                    this.setState({
+                        SalesIncome: salesIncome,
+                        OtherRevenue: otherRevenue,
+                        CustomerReceipt: customerReceipt,
+                        OtherReceipt: otherReceipt,
+                        PurchaseExpense: purchaseExpense,
+                        OtherExpense: otherExpense,
+                        SupplierPayment: supplierPayment,
+                        OtherPayment: otherPayment,
+                        SalesCategory: salesCategoryWise,
+                        StockCategory: stockCategoryWise,
+                        loaded2: true,
+                        initial: false
+                    })
+                    console.log('Finished calling dashboard contents')
                 })
 
         } catch (error) {
@@ -162,24 +165,24 @@ class DashboardPage extends Component {
             "authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
         }
         try {
-            await axios.post(api.GET_LINE_DATA, body, { headers: post } )
-            .then( res => {
-                let response = res.data.requestedData
-                this.setState({
-                    LineData: response,
-                    loaded3: true
+            await axios.post(api.GET_LINE_DATA, body, { headers: post })
+                .then(res => {
+                    let response = res.data.requestedData
+                    this.setState({
+                        LineData: response,
+                        loaded3: true
+                    })
+                    console.log('Finished calling LineChart contents')
                 })
-                console.log('Finished calling LineChart contents')
-            })
         } catch (error) {
             console.log(error)
         }
     }
 
     render() {
-        //console.log('In Dashboard Render',this.state)
-        const { loaded, loaded2, loaded3, initial, LineData, SalesIncome, OtherRevenue,CustomerReceipt, OtherReceipt, SupplierPayment, OtherPayment, PurchaseExpense, OtherExpense, SalesCategory, StockCategory, CashReceivable, CashPayable, CashOnBank, CashOnHand  } = this.state
-        const { loaderStyle, container, topNav,textStyle   } = styles
+        console.log('In Dashboard Render',this.state) 
+        const { loaded, loaded2, loaded3, initial, LineData, SalesIncome, OtherRevenue, CustomerReceipt, OtherReceipt, SupplierPayment, OtherPayment, PurchaseExpense, OtherExpense, SalesCategory, StockCategory, CashReceivable, CashPayable, CashOnBank, CashOnHand } = this.state
+        const { loaderStyle, container, topNav, textStyle } = styles
         const initialLoader = <ActivityIndicator
             animating={initial}
             style={loaderStyle}
@@ -200,8 +203,8 @@ class DashboardPage extends Component {
                 <Info line2='Payable' amount={CashPayable} />
             </View>
             <View style={{ flexDirection: 'row' }}>
-            <CB data={CashOnHand}/>
-            <BB data={CashOnBank} /> 
+                <CB data={CashOnHand} />
+                <BB data={CashOnBank} />
             </View>
         </View>
         return (
@@ -212,9 +215,9 @@ class DashboardPage extends Component {
                     <StatusBar barStyle="light-content" hidden={false} backgroundColor={colors.BGStatus} />
                     <View style={container}>
                         <View style={topNav}>
-                            <RoundNav onPress={this.openReport} iconName='activity' heading='Analytics' iconStyle={{ backgroundColor: '#c9dcfc', borderColor: '#4f91ff' }} />
-                            <RoundNav iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
-                            <RoundNav iconName='clipboard' heading='Orders' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
+                            <RoundNav onPress={this.openReport} iconName='activity' heading='Reports' iconStyle={{ backgroundColor: '#c9dcfc', borderColor: '#4f91ff' }} />
+                            <RoundNav screenProps={'Hello'} onPress={() => ToastAndroid.show('Work in progress', ToastAndroid.SHORT)} iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
+                            <RoundNav iconName='clipboard' onPress={() => ToastAndroid.show('Work in progress', ToastAndroid.SHORT)} heading='Suppliers' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
                         </View>
                         {/* <View style={topNav}>
                             <RoundNav iconName='activity' heading='Tasks' iconStyle={{ backgroundColor: '#d5e8d5', borderColor: '#aecbaa' }} />
@@ -222,25 +225,30 @@ class DashboardPage extends Component {
                             <RoundNav iconName='activity' heading='Products' iconStyle={{ backgroundColor: '#f0c8b4', borderColor: '#b2856d' }} />
                         </View> */}
                         {loaded ? cashBlock : null}
-                        
+
                         <View style={{ height: 20 }}></View>
                         {initial ? initialLoader : null}
                         <View style={{ height: 40 }}></View>
-                      
+
                         {loaded2 ? Report : null}
 
-
+                        <View style={{ height: 20 }}></View>
                         
-                        {/* <View style={{ height: 20 }}></View>
-                     {loaded2 ? <Card>
-                         <Text style={textStyle}>Heading</Text>
-                         <LineCT lineData={this.state.LineData} />
-                         </Card> : null} */}
-                     <View style={{ height: 20 }}></View>
-                     {loaded3 ? <Card>
-                         <Text style={textStyle}>Sales and Purchase</Text>
-                         <LineCT lineData={LineData} bez={true} />
-                         </Card> : null}
+                        {loaded3 ? <Card>
+                            <Text style={textStyle}>Sales and Purchase</Text>
+                            {/* <View style={styles.textSection}><Text style={{fontSize: 12}}>Last 12 Days</Text></View> */}
+                            <View style={{alignItems: 'center', paddingBottom: 10,}}>
+                            <View style={{flexDirection: 'row',justifyContent: 'flex-start'}}>
+                            {/* <View style={{width: 40}}></View> */}
+                            <View style={[styles.round, {backgroundColor: '#103d85'}]}></View>
+                            <Text style={{marginLeft: 5}}>Sales</Text>
+                            <View style={{width: 40}}></View>
+                            <View style={[styles.round, {backgroundColor: '#e00b0b'}]}></View>
+                            <Text style={{marginLeft: 5}}>Purchases</Text>
+                            </View>
+                            </View>
+                            <LineCT lineData={LineData} bez={true} />
+                        </Card> : null}
 
                         <View style={{ height: 40 }}></View>
 
@@ -272,5 +280,16 @@ const styles = StyleSheet.create({
         fontSize: 22,
         width: screenWidth - 10,
         paddingVertical: 10
+    },
+    round: {
+        height: 15,
+        width: 15,
+        borderRadius: 50,
+        marginLeft: 10
+    },
+    textSection:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: 30,
     }
 });

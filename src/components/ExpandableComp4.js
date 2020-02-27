@@ -86,7 +86,7 @@ class ExpandableComp4 extends Component {
       }
       onCollapse = () => {
         Animated.timing(this.componentHeight,{
-            duration: 100,
+            duration: 500,
             toValue: 90
         }).start();
       }
@@ -134,7 +134,7 @@ class ExpandableComp4 extends Component {
                         </View>
                         <View style={{ height: 20 }}></View>
                         {/* ############ EXPANDABLE SECTION ################### */}
-                        {Display}
+                        {this.state.collapsed ? null : Display}
                         {/* {!this.state.collapsed ? <View>
                             {this.state.revenue.map( (e) => 
                                 <BoxInfo subtitle='Maybe' label1={e[0]} amount1={e[1]} /> )}
