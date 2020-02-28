@@ -45,8 +45,14 @@ class ExpandablePage extends Component {
         })
         let length = salesRevenue.length - 1
         let salesAmount = salesRevenue[length]
-        this.setState({ revenue: Sales, amount: salesAmount });
+        if(salesAmount == undefined || salesAmount== null){
+            salesAmount = 0
+            console.log('executed if salesAmount',salesAmount)
+            this.setState({ Exist: false, revenue: Sales, amount: salesAmount})
+        }else{
+        this.setState({ Exist: true, revenue: Sales, amount: salesAmount });
     }
+}
     getOtherRevenueAmount = () => {
         let jsonData = this.OR
         //console.log('in exapnd',jsonData)
@@ -61,7 +67,12 @@ class ExpandablePage extends Component {
 
     toggleExpanded = () => {
         this.setState({ collapsed: !this.state.collapsed });
-        !this.state.collapsed ? this.onCollapse() : this.onExpand()
+        if(this.state.Exist){
+            !this.state.collapsed ? this.onCollapse() : this.onExpand()
+            }
+            else{
+                this.setState({collapsed: true})
+            }
 
     }
     onExpand = () => {
@@ -116,10 +127,12 @@ class ExpandablePage extends Component {
                                     keyExtractor={(i, index) => { 
                                         return index.toString() }}
                                     renderItem={(data) => {
+                                        let amount = parseInt(data.item[1])
+                                        let cash = amount.toFixed(2) 
                                         return (<View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{data.item[0]}</Text>
-                                                <Text style={styles.textStyle}>{data.item[1]}</Text>
+                                                <Text style={styles.textStyle}>{cash}</Text>
                                             </View>
                                             {/* <View style={{ height: 1.5 }}></View> */}
                                             <Divider style={{ backgroundColor: 'gray',marginLeft: 20,marginRight: 20 }} />

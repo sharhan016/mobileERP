@@ -99,8 +99,8 @@ class ExpandableComp4 extends Component {
        const { PExpense } = this.state
        const Display = PExpense ? PExpense.map( (a, index) => {
         return(
-            <View>
-            <View key={index} style={styles.horizontalView}>
+            <View key={index}>
+            <View style={styles.horizontalView}>
         <Text style={styles.textStyle}>{a[0]}</Text>
         <Text style={styles.textStyle}>{a[1]}</Text>
     </View>

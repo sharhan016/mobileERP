@@ -100,12 +100,13 @@ class LoginPage extends Component {
     }
 
     submit = async (user, pass) => {
-        let ali = 'ap_aldabbousdb' // #TODO:add this section dynamically
+        //let ali =  // #TODO:add this section dynamically
+        let ali = this.props.navigation.getParam('Alias')
         let id = this.props.navigation.getParam('ID')
         let post = {
             CompanyID: id,
-            username: 'aldabbousautoparts@gmail.com',
-            password: 'admin123#dabbous'
+            username: user,
+            password: pass
         }
         const headers = {
             'alias': ali
@@ -117,19 +118,20 @@ class LoginPage extends Component {
             console.log('data',response)
             const userData = data["userData"]
             const token = data.authToken
-
-            this.storeToken(userData, token)
+            console.log('Token in Login Page',token)
+            this.storeToken(userData, token, ali)
         }).catch(error => {
             ToastAndroid.show("Login Failed", ToastAndroid.SHORT);
             this.setState({ loading: false });
             console.log('Error: ', error)
         })
     }
-    storeToken = async (data, token) => {
+    storeToken = async (data, token, alias) => {
         try {
             await AsyncStorage.setItem(api.TOKEN, token)
             await AsyncStorage.setItem(api.USER_DATA, JSON.stringify(data))
             await AsyncStorage.setItem(api.LOGGED_IN, TRUE )
+            await AsyncStorage.setItem(api.ALIAS_NAME, alias)
         } catch (error) {
             console.log('Error inside localStorage',error)
         }
@@ -150,6 +152,7 @@ class LoginPage extends Component {
                     <TextInput
                         onChangeText={this.getUserId}
                         value={this.state.username}
+                        autoCapitalize={"none"}
                         style={styles.inputContainer}
                         placeholder={'Username'}
                         placeholderTextColor={colors.LoginButton}
@@ -166,6 +169,7 @@ class LoginPage extends Component {
                     <TextInput
                         style={styles.inputContainer}
                         onChangeText={this.getPassword}
+                        autoCapitalize={"none"}
                         value={this.state.password}
                         placeholder={'Password'}
                         placeholderTextColor={colors.LoginButton}

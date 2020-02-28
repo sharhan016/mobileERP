@@ -24,7 +24,7 @@ class CashBlock extends Component {
     onExpand = () => {
         Animated.timing(this.componentHeight, {
             duration: 1000,
-            toValue: 150,
+            toValue: 130,
         }).start();
     }
     onCollapse = () => {
@@ -67,13 +67,16 @@ class CashBlock extends Component {
                             data={this.state.json}
                             style={{marginTop: 10}}
                             renderItem={(data) => {   
-                                let name = data.item.LedgerName.slice(5,20)                      
+                                let name = data.item.LedgerName.slice(5,20)    
+                                console.log(typeof data.item.OB)
+                                let amount = parseInt(data.item.OB)
+                                let cash = amount.toFixed(2)                  
                                 return(
                                     <View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{name}</Text>
                                                 <View style={{width: 15}}></View>
-                                                <Text style={styles.headingTextStyle}>${data.item.OB}</Text>
+                                                <Text style={styles.headingTextStyle}>${cash}</Text>
                                             </View>
                                             {/* <View style={{ height: 1.5 }}></View> */}
                                             <Divider style={{ backgroundColor: 'gray',marginLeft: 20,marginRight: 20 }} />

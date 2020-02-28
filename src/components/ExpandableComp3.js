@@ -54,7 +54,7 @@ class ExpandableComp3 extends Component {
             }
             return l
         })
-
+        console.log('payments',payments)
          this.setState({supplierPayments: payments})
         let post = []
         const getAmount = payments.map( (n) => {

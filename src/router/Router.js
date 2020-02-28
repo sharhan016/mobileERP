@@ -12,6 +12,7 @@ import CustomerPage from '../screens/CustomerPage';
 import AuthScreen from '../screens/AuthScreen';
 import ReportPage from '../screens/ReportPage';
 import Sidebar from '../components/SideBar';
+import LogOut from '../components/LogOut';
 import colors from "../config/colors";
 
 class Navigator extends Component {
@@ -49,8 +50,14 @@ const AppDrawer = createDrawerNavigator({
         navigationOptions: {
             title: 'Reports',
             drawerIcon: ({tintColor}) => <Feather name="list" size={18} color={tintColor} />
-        }
-    }
+        },
+    },
+    Logout: { 
+        screen: LogOut,
+        navigationOptions: {
+         title: 'Sign Out',
+         drawerIcon: ({tintColor}) => <Feather name="log-out" size= {18} color={tintColor} />
+       } }
 },
 {
     contentComponent: props => <Sidebar {...props} />,

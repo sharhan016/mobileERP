@@ -75,8 +75,9 @@ class AliasPage extends Component {
     }
 
     searchAlias = async () => {
-        let ali = 'ap_lagnuvodb' //TODO:
-            fetch(api.USER_LOGIN, {
+        //let ali = 'ap_lagnuvodb' //TODO:
+        let ali = this.state.alias   
+        fetch(api.USER_LOGIN, {
             method: 'POST',
             headers: {
                 'alias': ali
@@ -94,11 +95,11 @@ class AliasPage extends Component {
 
     checkAlias = async () => {
         const { alias } = this.state;
-        let ali = 'ap_aldabbousdb' //#TODO: change this 
+       // let ali = 'ap_aldabbousdb' //#TODO: change this 
         if(alias.length < 4){
             return alert('Please Enter valid Alias');
         }   
-        this.searchAlias(ali)
+        this.searchAlias(alias)
     }
     searchAlias = async (alias) => {
         let mycompanies = []
@@ -114,7 +115,7 @@ class AliasPage extends Component {
             let companyId = mycompanies[0]["CompanyID"];
             console.log('companyId',companyId)
             if(mycompanies.length == 1){
-                this.props.navigation.navigate("SignIn",{ ID: companyId});
+                this.props.navigation.navigate("SignIn",{ ID: companyId, Alias: alias});
             }
             else{
                 this.props.navigation.navigate('Companies', {navigationData: mycompanies})
@@ -200,6 +201,7 @@ class AliasPage extends Component {
                     <Feather name={'globe'} size={24} color={colors.LoginButton} style={styles.inputIcon} />
                     <TextInput
                         onChangeText={this.getAlias}
+                        autoCapitalize={"none"}
                         value={this.state.alias}
                         style={styles.inputContainer}
                         placeholder={'Alias'}

@@ -13,6 +13,7 @@ import axios from "axios";
 import * as api from '../config/api';
 import Card from '../components/Card';
 import PieJS from './PieJS';
+import LineCT from '../components/LineChart';
 import Revenue from '../screens/ExpandablePage';
 import Receipt from '../components/ExpandableComp2';
 import Payment from '../components/ExpandableComp3';
@@ -71,9 +72,10 @@ class ReportPage extends Component {
         try {
             let token = await AsyncStorage.getItem(api.TOKEN);
             let data = await AsyncStorage.getItem(api.USER_DATA);
+            let alias = await AsyncStorage.getItem(api.ALIAS_NAME);
             var object = JSON.parse(data)
-            this.setState({ tokenID: token })
-            console.log('this is in state', this.state.tokenID)
+            this.setState({ tokenID: token, aliasName: alias })
+            console.log('this is in report page state', this.state.tokenID)
             //this.getCurrentMoneyStatus()
             //this.getDashboardData()
         } catch (error) {
@@ -83,10 +85,11 @@ class ReportPage extends Component {
   
     getDashboardData = async () => {
         const { value, date, lastWeekdate, weekday, customStartDate, customEndDate } = this.state
-        let ali = 'ap_aldabbousdb' //TODO: change it 
+        let ali = this.state.aliasName 
         let body = {}
         let post = {
             "alias": ali,
+            //"authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
             "authorization": this.state.tokenID,
         }
         //this.setState({reportloading: true})
@@ -200,9 +203,19 @@ class ReportPage extends Component {
         let ddd = startDate.toISOString().slice(0, 10)
         let day = startDate.getDate().toString()
         let month = startDate.getMonth()
-        if (month <= 9)
+        console.log('month',month)
+        //if (month <= 9){
             month += 1
-        maasam = '0' + month.toString()
+        //}
+        if(month < 10){
+            console.log('exec if')
+            maasam = '0' + month.toString()
+        }
+        else{
+            console.log('exec else')
+            maasam = month.toString()
+        }
+        console.log('maasam',maasam)
         let year = startDate.getFullYear().toString()
         let startingDate = day + '-' + maasam + '-' + year
 
@@ -305,13 +318,13 @@ class ReportPage extends Component {
             <TouchableOpacity onPress={this.nextMonth}><Ionicons name="md-arrow-dropright-circle" size={28} color={'black'} /></TouchableOpacity>
         </View>
         const CustomPicker = <View style={styles.customContainer}>
-            <Text style={{ fontSize: 14, color: 'gray' }} >From:</Text>
+            <Text style={{ fontSize: 12, color: 'gray' }} >From:</Text>
             <View style={{ paddingHorizontal: 5 }}></View>
-            <TouchableOpacity onPress={this.showDatePicker}><Text style={{ fontSize: 15 }} >{customStartDate}</Text></TouchableOpacity>
+            <TouchableOpacity onPress={this.showDatePicker}><Text style={{ fontSize: 14 }} >{customStartDate}</Text></TouchableOpacity>
             <View style={{ paddingHorizontal: 15 }}></View>
-            <Text style={{ fontSize: 14, color: 'gray' }} >To:</Text>
+            <Text style={{ fontSize: 12, color: 'gray' }} >To:</Text>
             <View style={{ paddingHorizontal: 5 }}></View>
-            <TouchableOpacity onPress={this.showDatePicker2}><Text style={{ fontSize: 15 }}>{customEndDate}</Text></TouchableOpacity>
+            <TouchableOpacity onPress={this.showDatePicker2}><Text style={{ fontSize: 14 }}>{customEndDate}</Text></TouchableOpacity>
         </View>
         const ReportButton = <Button label='Get Report' onPress={this.getReportBtn} style={styles.buttonStyle} />
         const progress = <ActivityIndicator

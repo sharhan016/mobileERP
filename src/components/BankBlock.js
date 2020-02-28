@@ -58,7 +58,7 @@ class BankBlock extends Component {
     onExpand = () => {
         Animated.timing(this.componentHeight, {
             duration: 1000,
-            toValue: 150,
+            toValue: 130,
         }).start();
     }
     onCollapse = () => {

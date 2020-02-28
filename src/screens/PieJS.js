@@ -12,7 +12,7 @@ export default class PieJS extends React.PureComponent {
     const data = dashValue.map( (d) => {
       let exe = this.props.execute
       if(exe == 1){
-      return parseInt(d.GrandTotal) + 1000
+      return parseInt(d.GrandTotal)
       }
       else if(exe == 2){
         return parseInt(d.OSVal)

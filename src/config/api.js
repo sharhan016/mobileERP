@@ -9,3 +9,4 @@ export const LOGGED_IN = "isUserLoggedIn";
 export const USER_DATA = "User";
 export const TOKEN = "Token";
 export const USER_NAME = "userName";
+export const ALIAS_NAME = "alias";

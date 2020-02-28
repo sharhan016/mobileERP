@@ -56,7 +56,7 @@ class ExpandableComp2 extends Component {
             }
             return l
         })
-
+        console.log('receipts',receipts)
         this.setState({ receipt: receipts })
         let post = []
         const getAmount = receipts.map((n) => {
@@ -90,7 +90,7 @@ class ExpandableComp2 extends Component {
     onExpand = () => {
         Animated.timing(this.componentHeight, {
             duration: 1000,
-            toValue: 200,
+            toValue: 230,
         }).start();
     }
     onCollapse = () => {

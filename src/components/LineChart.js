@@ -24,8 +24,8 @@ class LineChart2 extends Component {
 
     constructor(props) {
         super(props);
-        const json = jsonData.requestedData
-        // const json = this.props.lineData
+        //const json = jsonData.requestedData
+         const json = this.props.lineData
         this.labels = json.Labels
         this.sale = [0, ...json.SalesData]
         this.purchase = [0,...json.PurchaseData]

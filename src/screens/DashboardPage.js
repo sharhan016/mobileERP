@@ -32,6 +32,7 @@ class DashboardPage extends Component {
         super(props);
         let today = moment();
         let day = today.format("DD-MM-YYYY")
+        let toDate = moment(day, "DD-MM-YYYY").subtract(12, 'days').format("DD-MM-YYYY");
         let lweek = moment(day, "DD-MM-YYYY").subtract(5, 'days').format("DD-MM-YYYY");
         this.state = {
             tokenID: '',
@@ -41,6 +42,7 @@ class DashboardPage extends Component {
             CashReceivable: '',
             SalesIncome: [],
             todayDate: day,
+            DateTo: toDate,
             beforeDate: lweek,
             // OtherRevenue: [],
             loaded: false,
@@ -64,9 +66,10 @@ class DashboardPage extends Component {
     getToken = async () => {
         try {
             let token = await AsyncStorage.getItem(api.TOKEN);
+            let alias = await AsyncStorage.getItem(api.ALIAS_NAME);
             let data = await AsyncStorage.getItem(api.USER_DATA);
-            this.setState({ tokenID: token })
-            //console.log('this is in state', this.state.tokenID)
+            this.setState({ tokenID: token, aliasName: alias })
+            console.log('this is in state', this.state.tokenID)
             this.getCurrentMoneyStatus()
             this.getDashboardData()
             this.getLineData()
@@ -77,11 +80,12 @@ class DashboardPage extends Component {
 
     getCurrentMoneyStatus = async () => {
 
-        let alias = 'ap_lagnuvodb' //TODO: change it later
+        let alias = this.state.aliasName //TODO: change it later
+        console.log('alias in money',alias)
         let post = {
             "alias": alias,
-            //"authorization": this.state.tokenID,
-            "authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
+            "authorization": this.state.tokenID,
+            //"authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
         }
         console.log('getCurrentMoneyStatus is called')
         try {
@@ -99,7 +103,6 @@ class DashboardPage extends Component {
                         CashReceivable: cashReceivable,
                         loaded: true
                     })
-                    console.log('Finished calling MoneyStatus contents')
                 })
                 .catch(error => console.log(error))
         } catch (error) {
@@ -108,12 +111,12 @@ class DashboardPage extends Component {
 
     }
     getDashboardData = async () => {
-        let ali = 'ap_aldabbousdb' //TODO: change it 
+        let ali = this.state.aliasName //TODO: change it 
         let post = {
             "alias": ali,
+            //"authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
             "authorization": this.state.tokenID,
         }
-        console.log('getDashboardData is called')
         try {
             await axios.post(api.GET_DASHBOARD_DATA, {}, { headers: post })
                 .then(res => {
@@ -143,7 +146,6 @@ class DashboardPage extends Component {
                         loaded2: true,
                         initial: false
                     })
-                    console.log('Finished calling dashboard contents')
                 })
 
         } catch (error) {
@@ -151,28 +153,27 @@ class DashboardPage extends Component {
         }
     }
     getLineData = async () => {
-        console.log('getLineData is called')
-        let alias = 'ap_lagnuvodb' //TODO: change it later
-        const { todayDate, beforeDate } = this.state
+        let alias = this.state.aliasName //TODO: change it later
+        const { todayDate, DateTo } = this.state
         let body = {
-            "dateFrom": beforeDate,
+            "dateFrom": DateTo,
             "dateTo": todayDate
         }
-        //console.log('BODY',body)
+        console.log('BODY',body)
         let post = {
             "alias": alias,
-            //"authorization": this.state.tokenID,
-            "authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
+            "authorization": this.state.tokenID,
+            //"authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
         }
         try {
             await axios.post(api.GET_LINE_DATA, body, { headers: post })
                 .then(res => {
+                    console.log('LineData',res)
                     let response = res.data.requestedData
                     this.setState({
                         LineData: response,
                         loaded3: true
                     })
-                    console.log('Finished calling LineChart contents')
                 })
         } catch (error) {
             console.log(error)
@@ -180,7 +181,7 @@ class DashboardPage extends Component {
     }
 
     render() {
-        console.log('In Dashboard Render',this.state) 
+        //console.log('In Dashboard Render',this.state) 
         const { loaded, loaded2, loaded3, initial, LineData, SalesIncome, OtherRevenue, CustomerReceipt, OtherReceipt, SupplierPayment, OtherPayment, PurchaseExpense, OtherExpense, SalesCategory, StockCategory, CashReceivable, CashPayable, CashOnBank, CashOnHand } = this.state
         const { loaderStyle, container, topNav, textStyle } = styles
         const initialLoader = <ActivityIndicator
