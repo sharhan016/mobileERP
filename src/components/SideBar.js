@@ -21,21 +21,21 @@ class SideBar extends Component {
         }
        // this.getToken();
     }
-    
+     
     componentDidMount() {
-        //this.getToken();
+        this.getToken();
     }
-    // getToken = async () => {
-    //     try {
-    //         const userType = await AsyncStorage.getItem(api.USER_TYPE)
-    //         const userName = await AsyncStorage.getItem(api.USER_NAME)
-    //         const userDesignation = await AsyncStorage.getItem(api.USER_DESIGNATION)
-    //         console.log('Usertype & name & designation value inside sidebar ',userType, userName, userDesignation)
-    //         this.setState({value: userType, name: userName, designation: userDesignation });
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
+    getToken = async () => {
+        try {
+            let data = await AsyncStorage.getItem(api.USER_DATA);
+            var object = JSON.parse(data)
+            // const userName = await AsyncStorage.getItem(api.USER_NAME)
+            // const userDesignation = await AsyncStorage.getItem(api.USER_DESIGNATION)
+            this.setState({name: object.AdminName, designation: object.Company_Name });
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
    
      
@@ -98,14 +98,14 @@ const styles = StyleSheet.create({
     },
     name: {
         color: colors.DRW_TINT,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '800',
         paddingLeft: 20,
         marginVertical: 5
     },
     designation: {
         color: colors.DRW_TINT,
-        fontSize: 15,
+        fontSize: 16,
         marginRight: 4,
         paddingLeft: 20,
         fontWeight: '500'

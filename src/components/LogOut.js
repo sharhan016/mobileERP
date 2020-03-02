@@ -20,7 +20,7 @@ class LogOut extends Component {
           } catch(error){
               console.log('error in remove Item from LOGOUT PAGE')
           }
-          this.props.navigation.navigate('Auth');
+          this.props.navigation.navigate('SignIn');
       }
 
     render() {

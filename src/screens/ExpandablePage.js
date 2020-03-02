@@ -6,6 +6,7 @@ import json from '../screens/data2.json'
 import BoxInfo from '../components/BoxInfo';
 import colors from "../config/colors";
 import { Divider } from 'react-native-elements';
+import Feather from 'react-native-vector-icons/Feather';
 
 
 const WIDTH = Dimensions.get('screen').width;
@@ -19,7 +20,7 @@ class ExpandablePage extends Component {
             revenue: []
             //Sales: []
         }
-        this.componentHeight = new Animated.Value(90)
+        this.componentHeight = new Animated.Value(100)
         this.SI = this.props.SI
         this.OR = this.props.OR
 
@@ -45,14 +46,14 @@ class ExpandablePage extends Component {
         })
         let length = salesRevenue.length - 1
         let salesAmount = salesRevenue[length]
-        if(salesAmount == undefined || salesAmount== null){
+        if (salesAmount == undefined || salesAmount == null) {
             salesAmount = 0
-            console.log('executed if salesAmount',salesAmount)
-            this.setState({ Exist: false, revenue: Sales, amount: salesAmount})
-        }else{
-        this.setState({ Exist: true, revenue: Sales, amount: salesAmount });
+            console.log('executed if salesAmount', salesAmount)
+            this.setState({ Exist: false, revenue: Sales, amount: salesAmount })
+        } else {
+            this.setState({ Exist: true, revenue: Sales, amount: salesAmount, length: length + 1 });
+        }
     }
-}
     getOtherRevenueAmount = () => {
         let jsonData = this.OR
         //console.log('in exapnd',jsonData)
@@ -67,24 +68,24 @@ class ExpandablePage extends Component {
 
     toggleExpanded = () => {
         this.setState({ collapsed: !this.state.collapsed });
-        if(this.state.Exist){
+        if (this.state.Exist) {
             !this.state.collapsed ? this.onCollapse() : this.onExpand()
-            }
-            else{
-                this.setState({collapsed: true})
-            }
+        }
+        else {
+            this.setState({ collapsed: true })
+        }
 
     }
     onExpand = () => {
         Animated.timing(this.componentHeight, {
-            duration: 1000,
-            toValue: 250,
+            duration: 800,
+            toValue: this.state.length == 1 ? 150 : 250,
         }).start();
     }
     onCollapse = () => {
         Animated.timing(this.componentHeight, {
             duration: 500,
-            toValue: 90
+            toValue: 100
         }).start();
     }
     static navigationOptions = {
@@ -92,8 +93,7 @@ class ExpandablePage extends Component {
     }
 
     render() {
-
-       
+        const downArrow = <Feather name={this.state.collapsed ? 'chevron-down' : 'chevron-up'} size={15} style={{ padding: 0 }} />
         return (
             <Animated.View style={[styles.component]} >
 
@@ -117,25 +117,30 @@ class ExpandablePage extends Component {
                                     <Text style={styles.textStyle}>Other Revenue</Text>
                                     <Text style={styles.textStyle}>${this.state.otherAmount}</Text>
                                 </View>
-                                <View style={{ height: 20 }}></View>
+                                <View style={{ alignItems: 'center', justifyContent: 'center', }}>
+                                {this.state.Exist ? downArrow : null}
+                                </View>
+                                <View style={{ height: 5 }}></View>
+
                                 {/* ############ EXPANDABLE SECTION ################### */}
-                              
-                
+
+
                                 <FlatList
                                     nestedScrollEnabled={true}
                                     data={this.state.revenue}
-                                    keyExtractor={(i, index) => { 
-                                        return index.toString() }}
+                                    keyExtractor={(i, index) => {
+                                        return index.toString()
+                                    }}
                                     renderItem={(data) => {
                                         let amount = parseInt(data.item[1])
-                                        let cash = amount.toFixed(2) 
+                                        let cash = amount.toFixed(2)
                                         return (<View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{data.item[0]}</Text>
                                                 <Text style={styles.textStyle}>{cash}</Text>
                                             </View>
                                             {/* <View style={{ height: 1.5 }}></View> */}
-                                            <Divider style={{ backgroundColor: 'gray',marginLeft: 20,marginRight: 20 }} />
+                                            <Divider style={{ backgroundColor: 'gray', marginLeft: 20, marginRight: 20 }} />
                                         </View>
                                         )
                                     }}

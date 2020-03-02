@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Animated, FlatList, TouchableOpacity, Touchable, Dimensions, ScrollView } from "react-native";
 import colors from "../config/colors";
+import Feather from 'react-native-vector-icons/Feather';
 import { Divider } from 'react-native-elements';
 
 const WIDTH = Dimensions.get('screen').width - 20;
@@ -10,9 +11,10 @@ class BankBlock extends Component {
         super(props);
         this.state = {
             collapsed: true,
-            data: props.data
+            data: props.data,
+            InBankAmount: 0
         }
-        this.componentHeight = new Animated.Value(10)
+        this.componentHeight = new Animated.Value(16)
     }
     componentDidMount() {
         this.getCash();
@@ -57,26 +59,32 @@ class BankBlock extends Component {
     }
     onExpand = () => {
         Animated.timing(this.componentHeight, {
-            duration: 1000,
+            duration: 500,
             toValue: 130,
         }).start();
     }
     onCollapse = () => {
         Animated.timing(this.componentHeight, {
-            duration: 500,
-            toValue: 10
+            duration: 300,
+            toValue: 16
         }).start();
     }
    
     render() {
+        const downArrow = <Feather name={this.state.collapsed ? 'chevron-down' : 'chevron-up'} size={15} style={styles.inputIcon} />
+        const { InBankAmount} = this.state
+        let bankAmount = InBankAmount.toFixed(2)
         return (
             <Animated.View style={{height: this.componentHeight}} >
 
-                <TouchableOpacity activeOpacity={.9} onPress={this.toggleExpanded}>
-                    <View style={styles.touchable}>
+                <TouchableOpacity style= {styles.touchable} activeOpacity={.9} onPress={this.toggleExpanded}>
+               
                     <View style={styles.container}>
                         <Text style={styles.headingText}>Bank Amount</Text>
-                        <Text style={styles.valueText}>{'\t'} ${this.state.InBankAmount}</Text>
+                        <Text style={styles.valueText}>{'\t'} ${bankAmount}</Text>
+                        </View>
+                        <View style={{alignItems: 'center', justifyContent: 'center',}}>
+                        {downArrow}
                         </View>
                         {/* <View style={{ height: 15 }}></View> */}
                             <Animated.View style={[{}, { height: this.componentHeight }]}>
@@ -84,13 +92,15 @@ class BankBlock extends Component {
                             data={this.state.BankCash}
                             style={{marginTop: 10}}
                             renderItem={(data) => {     
-                                let name = data.item.LedgerName.slice(5,20)                        
+                                let name = data.item.LedgerName.slice(5,20)      
+                                let ob = data.item.OB
+                                let amount = ob.toFixed(2)                  
                                 return(
                                     <View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{name}</Text>
                                                 <View style={{width: 15}}></View>
-                                                <Text style={styles.headingTextStyle}>${data.item.OB}</Text>
+                                                <Text style={styles.headingTextStyle}>${amount}</Text>
                                             </View>
                                             {/* <View style={{ height: 1.5 }}></View> */}
                                             <Divider style={{ backgroundColor: 'gray',marginLeft: 20,marginRight: 20 }} />
@@ -104,7 +114,7 @@ class BankBlock extends Component {
                             
                             </Animated.View>
                
-                            </View>
+                           
                 </TouchableOpacity>
             </Animated.View>
         );
@@ -121,7 +131,7 @@ const styles = StyleSheet.create({
         //backgroundColor: 'black'
     },
     touchable: {
-        padding: 5,
+        //padding: 5,
         //height: 40,
         paddingRight: 10,
         paddingTop: 10,
@@ -138,13 +148,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#c9dcfc'
     },
     headingText: {
-        fontSize: 14,
+        fontSize: 13,
         color: '#2c2d2e',
         marginTop: 5,
     },
     valueText: {
         paddingTop: 5,
-        fontSize: 16,
+        fontSize: 15,
         color: '#3168cc',
         fontWeight: '700'
     },
@@ -162,5 +172,9 @@ const styles = StyleSheet.create({
         //paddingRight: 15,
         paddingVertical: 5,
         justifyContent: 'space-around'
+    },
+    inputIcon: {
+        padding: 0,
+
     },
 });

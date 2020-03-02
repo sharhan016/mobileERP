@@ -7,6 +7,7 @@ import BoxInfo from './BoxInfo';
 import colors from "../config/colors";
 import { Divider } from 'react-native-elements';
 import Test from '../screens/TestPage'
+import Feather from 'react-native-vector-icons/Feather';
 
 const WIDTH = Dimensions.get('screen').width;
 
@@ -18,7 +19,7 @@ class ExpandableComp3 extends Component {
             collapsed: true,
             supplierPayments: []
         }
-        this.componentHeight = new Animated.Value(90)
+        this.componentHeight = new Animated.Value(100)
 
         this.SP = this.props.SP
         this.OP = this.props.OP
@@ -54,7 +55,6 @@ class ExpandableComp3 extends Component {
             }
             return l
         })
-        console.log('payments',payments)
          this.setState({supplierPayments: payments})
         let post = []
         const getAmount = payments.map( (n) => {
@@ -89,14 +89,14 @@ class ExpandableComp3 extends Component {
       }
       onExpand = () => {
         Animated.timing(this.componentHeight,{
-            duration: 1000,
+            duration: 800,
             toValue: 200,
         }).start();
       }
       onCollapse = () => {
         Animated.timing(this.componentHeight,{
             duration: 500,
-            toValue: 90
+            toValue: 100
         }).start();
       }
       static navigationOptions = {
@@ -104,6 +104,7 @@ class ExpandableComp3 extends Component {
     }
     
     render() {
+        const downArrow = <Feather name={this.state.collapsed ? 'chevron-down' : 'chevron-up'} size={15} style={{ padding: 0 }} />
        //console.log('in render payments',this.state)
        const Display = this.state.supplierPayments.map( (a, index) => {
         return(
@@ -139,7 +140,10 @@ class ExpandableComp3 extends Component {
                             <Text style={styles.textStyle}>Other Payments</Text>
                             <Text style={styles.textStyle}>${this.state.OtherPaymentAmount}</Text>
                         </View>
-                        <View style={{ height: 20 }}></View>
+                        <View style={{ alignItems: 'center', justifyContent: 'center', }}>
+                                    {downArrow}
+                                </View>
+                                <View style={{ height: 5 }}></View>
                         {/* ############ EXPANDABLE SECTION ################### */}
                         <FlatList
                                     nestedScrollEnabled={true}

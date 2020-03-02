@@ -20,7 +20,7 @@ const Info = (props) => {
     return(
         <View style={styles.container}>
             <Text style={styles.headingText}> {props.line1} {props.line2}</Text>
-            <View style={{width: 10}}></View>
+            <View style={{width: 5}}></View>
             <Text style={styles.valueText}>{'\t'} {'$'+amount}</Text>
         </View>
     )
@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
     },
 
     headingText: {
-        fontSize: 14,
+        fontSize: 13,
         color: '#2c2d2e',
         marginTop: 5,
     },
     valueText: {
         paddingTop: 5,
-        fontSize: 16,
+        fontSize: 15,
         color: '#3168cc',
         fontWeight: '700'
     },

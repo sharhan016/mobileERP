@@ -1,26 +1,20 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar, ActivityIndicator,ToastAndroid, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, StatusBar, ActivityIndicator,ToastAndroid, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
 import moment from 'moment';
-import Button from '../components/Button';
 import Card from '../components/Card';
-import CardSection from '../components/CardSection';
 import RoundNav from '../components/RoundNav';
 import Info from '../components/Info';
-import Report from '../components/Report';
 import Header from '../components/Header';
 import colors from '../config/colors';
 import PieJS from './PieJS';
-import Line from '../components/Line';
 import LineCT from '../components/LineChart';
-import Spacer from '../components/Spacer';
 import Expandable from '../screens/ExpandablePage';
 import Expand2 from '../components/ExpandableComp2';
 import Expand3 from '../components/ExpandableComp3';
 import Expand4 from '../components/ExpandableComp4';
-import Test from './TestPage';
 import CB from '../components/CashBlock';
 import BB from '../components/BankBlock';
 
@@ -38,8 +32,8 @@ class DashboardPage extends Component {
             tokenID: '',
             CashOnBank: '',
             CashOnHand: '',
-            CashPayable: '',
-            CashReceivable: '',
+            CashPayable: 0,
+            CashReceivable: 0,
             SalesIncome: [],
             todayDate: day,
             DateTo: toDate,
@@ -67,9 +61,8 @@ class DashboardPage extends Component {
         try {
             let token = await AsyncStorage.getItem(api.TOKEN);
             let alias = await AsyncStorage.getItem(api.ALIAS_NAME);
-            let data = await AsyncStorage.getItem(api.USER_DATA);
             this.setState({ tokenID: token, aliasName: alias })
-            console.log('this is in state', this.state.tokenID)
+            console.log('token',token)
             this.getCurrentMoneyStatus()
             this.getDashboardData()
             this.getLineData()
@@ -80,14 +73,11 @@ class DashboardPage extends Component {
 
     getCurrentMoneyStatus = async () => {
 
-        let alias = this.state.aliasName //TODO: change it later
-        console.log('alias in money',alias)
+        let alias = this.state.aliasName
         let post = {
             "alias": alias,
             "authorization": this.state.tokenID,
-            //"authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
         }
-        console.log('getCurrentMoneyStatus is called')
         try {
             await axios.post(api.GET_CASH_VALUES, {}, { headers: post })
                 .then(response => {
@@ -111,10 +101,9 @@ class DashboardPage extends Component {
 
     }
     getDashboardData = async () => {
-        let ali = this.state.aliasName //TODO: change it 
+        let ali = this.state.aliasName
         let post = {
             "alias": ali,
-            //"authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
             "authorization": this.state.tokenID,
         }
         try {
@@ -153,22 +142,19 @@ class DashboardPage extends Component {
         }
     }
     getLineData = async () => {
-        let alias = this.state.aliasName //TODO: change it later
+        let alias = this.state.aliasName
         const { todayDate, DateTo } = this.state
         let body = {
             "dateFrom": DateTo,
             "dateTo": todayDate
         }
-        console.log('BODY',body)
         let post = {
             "alias": alias,
             "authorization": this.state.tokenID,
-            //"authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6IjIiLCJ1c2VybmFtZSI6Im9ubGluZUBsYWdudXZvLmNvbSIsIkNvbXBhbnlfSUQiOiIyIiwiRmlueWVhcl9JRCI6IjIiLCJMb2dnZWRPbiI6IjIwMjAtMDEtMjggMTE6Mzc6NTYuMDAwMDAwIiwiUmFuZG9tIjo2Mn0.sLbfqfWklEE3aambvVnR3r5xOxNi9kEKJQWETOsDsVg',
         }
         try {
             await axios.post(api.GET_LINE_DATA, body, { headers: post })
                 .then(res => {
-                    console.log('LineData',res)
                     let response = res.data.requestedData
                     this.setState({
                         LineData: response,
@@ -181,9 +167,10 @@ class DashboardPage extends Component {
     }
 
     render() {
-        //console.log('In Dashboard Render',this.state) 
         const { loaded, loaded2, loaded3, initial, LineData, SalesIncome, OtherRevenue, CustomerReceipt, OtherReceipt, SupplierPayment, OtherPayment, PurchaseExpense, OtherExpense, SalesCategory, StockCategory, CashReceivable, CashPayable, CashOnBank, CashOnHand } = this.state
         const { loaderStyle, container, topNav, textStyle } = styles
+        let receivableAmount = CashReceivable.toFixed(2)
+        let payableAmount = CashPayable.toFixed(2)
         const initialLoader = <ActivityIndicator
             animating={initial}
             style={loaderStyle}
@@ -200,8 +187,8 @@ class DashboardPage extends Component {
         </View>
         const cashBlock = <View>
             <View style={{ flexDirection: 'row' }}>
-                <Info line2='Receivable' amount={CashReceivable} />
-                <Info line2='Payable' amount={CashPayable} />
+                <Info line2='Receivable' amount={receivableAmount} />
+                <Info line2='Payable' amount={payableAmount} />
             </View>
             <View style={{ flexDirection: 'row' }}>
                 <CB data={CashOnHand} />
@@ -217,8 +204,8 @@ class DashboardPage extends Component {
                     <View style={container}>
                         <View style={topNav}>
                             <RoundNav onPress={this.openReport} iconName='activity' heading='Reports' iconStyle={{ backgroundColor: '#c9dcfc', borderColor: '#4f91ff' }} />
-                            <RoundNav screenProps={'Hello'} onPress={() => ToastAndroid.show('Work in progress', ToastAndroid.SHORT)} iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
-                            <RoundNav iconName='clipboard' onPress={() => ToastAndroid.show('Work in progress', ToastAndroid.SHORT)} heading='Suppliers' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
+                            <RoundNav onPress={() => ToastAndroid.show('Work in progress', ToastAndroid.SHORT)} iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
+                            <RoundNav onPress={() => ToastAndroid.show('Work in progress', ToastAndroid.SHORT)} iconName='clipboard' heading='Suppliers' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
                         </View>
                         {/* <View style={topNav}>
                             <RoundNav iconName='activity' heading='Tasks' iconStyle={{ backgroundColor: '#d5e8d5', borderColor: '#aecbaa' }} />

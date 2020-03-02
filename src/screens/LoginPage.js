@@ -100,7 +100,6 @@ class LoginPage extends Component {
     }
 
     submit = async (user, pass) => {
-        //let ali =  // #TODO:add this section dynamically
         let ali = this.props.navigation.getParam('Alias')
         let id = this.props.navigation.getParam('ID')
         let post = {
