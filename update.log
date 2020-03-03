@@ -1,0 +1,4 @@
+update 1.0.6:
+--> Fixed bugs related to cashBlock and bankBlock.
+--> Added icons to indicate a block of info to be expandable or not.
+--> Implemented pull to refresh method in dashboard.

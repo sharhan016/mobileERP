@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView, StatusBar, ActivityIndicator,ToastAndroid, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, StatusBar, ActivityIndicator,RefreshControl,ToastAndroid, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from "axios";
 import * as api from '../config/api';
@@ -19,6 +19,9 @@ import CB from '../components/CashBlock';
 import BB from '../components/BankBlock';
 
 const screenWidth = Dimensions.get('screen').width;
+
+
+  //const 
 
 class DashboardPage extends Component {
 
@@ -42,8 +45,20 @@ class DashboardPage extends Component {
             loaded: false,
             loaded2: false,
             loaded3: false,
-            initial: true
+            initial: true,
+            refreshing: false
         }
+      //  const [refreshing, setRefreshing] = React.useState(false);
+    }
+  
+    onRefresh = () => {
+        this.setState({refreshing: true})
+        this.getData()
+    }
+    getData = () => {
+        this.getDashboardData()
+        this.getCurrentMoneyStatus()
+        this.getLineData()
     }
     componentDidMount() {
         this.getToken()
@@ -101,6 +116,7 @@ class DashboardPage extends Component {
 
     }
     getDashboardData = async () => {
+        console.log('Reached dashboard data')
         let ali = this.state.aliasName
         let post = {
             "alias": ali,
@@ -110,6 +126,7 @@ class DashboardPage extends Component {
             await axios.post(api.GET_DASHBOARD_DATA, {}, { headers: post })
                 .then(res => {
                     let response = res.data.requestedData
+                    console.log(response.salesIncomes)
                     let salesIncome = response.salesIncomes
                     let otherRevenue = response.otherIncomes
                     let customerReceipt = response.customerReciepts
@@ -133,7 +150,8 @@ class DashboardPage extends Component {
                         SalesCategory: salesCategoryWise,
                         StockCategory: stockCategoryWise,
                         loaded2: true,
-                        initial: false
+                        initial: false,
+                        refreshing: false
                     })
                 })
 
@@ -199,7 +217,10 @@ class DashboardPage extends Component {
             <View style={container} >
                 <Header heading='Dashboard' onPress={() => this.props.navigation.openDrawer()} />
 
-                <ScrollView >
+                <ScrollView 
+                refreshControl={
+                    <RefreshControl progressBackgroundColor={colors.WHITISH} tintColor={colors.BGStatus} refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
+                  } >
                     <StatusBar barStyle="light-content" hidden={false} backgroundColor={colors.BGStatus} />
                     <View style={container}>
                         <View style={topNav}>

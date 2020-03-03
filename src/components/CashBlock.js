@@ -86,7 +86,7 @@ class CashBlock extends Component {
     }
 
     render() {
-        console.log('cashBlock',this.upArrowIcon)
+        // console.log('cashBlock',this.upArrowIcon)
         const downArrow =<Animated.View>
             <Feather 
             name={this.state.collapsed ? 'chevron-down' : 'chevron-up'} 

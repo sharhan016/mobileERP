@@ -282,7 +282,6 @@ class ReportPage extends Component {
         this.setState({ setDatePickerVisibility3: value })
     }
     getReportBtn = () => {
-        console.log('Button is clicked')
         this.setState({
             reportloading: true,
             loaded: false,
