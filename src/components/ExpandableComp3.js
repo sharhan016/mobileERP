@@ -28,6 +28,9 @@ class ExpandableComp3 extends Component {
         this.getCustomerPaymentData();
      
     }
+    currencyFormat =(num) => {
+        return '₹ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      }
     getCustomerPaymentData = () => {
         let jsonData = json
         let payments = this.SP
@@ -36,6 +39,7 @@ class ExpandableComp3 extends Component {
         //console.log('IN COMP3 ',payments)
         const getLabels = payments.map( (l) => {
             let amount = parseInt(l.OB) - parseInt(l.CreditSum) + parseInt(l.DebitSum)
+            let cash = this.currencyFormat(amount)
             if(l.VoucherType != ''){
                 if(l.VoucherType == 'CP'){
                     l.VoucherName =  'Cash Payment' 
@@ -61,7 +65,8 @@ class ExpandableComp3 extends Component {
             post.push(n.PaymentAmount)
         })
         const reducer = (acc, currentValue) => acc + currentValue;
-        let supAmount = post.reduce(reducer);
+        let sup = post.reduce(reducer);
+        let supAmount = this.currencyFormat(sup)
         this.setState({SupplierPaymentAmount: supAmount})
         this.getOtherPayments()
         //#TODO: merge similiar fields
@@ -76,7 +81,8 @@ class ExpandableComp3 extends Component {
             return arr.push(amount)
         })
         const reducer = (acc, currentValue) => acc + currentValue;
-        let otherAmount = arr.reduce(reducer);
+        let othe = arr.reduce(reducer);
+        let otherAmount = this.currencyFormat(othe)
         this.setState({OtherPaymentAmount: otherAmount})
         //console.log(arr)
     }
@@ -107,11 +113,13 @@ class ExpandableComp3 extends Component {
         const downArrow = <Feather name={this.state.collapsed ? 'chevron-down' : 'chevron-up'} size={15} style={{ padding: 0 }} />
        //console.log('in render payments',this.state)
        const Display = this.state.supplierPayments.map( (a, index) => {
+           let amount = this.currencyFormat(a.PaymentAmount)
+           console.log(amount)
         return(
             <ScrollView>
             <View key={index} style={styles.horizontalView}>
         <Text style={styles.textStyle}>{a.VoucherName}</Text>
-        <Text style={styles.textStyle}>{a.PaymentAmount}</Text>
+        <Text style={styles.textStyle}>{amount}</Text>
     </View>
     <View style={{ height: 2 }}></View>
     <Divider style={{ backgroundColor: 'gray' }} />
@@ -133,12 +141,12 @@ class ExpandableComp3 extends Component {
                         <View style={{ height: 2 }}></View>
                         <View style={styles.horizontalView}>
                             <Text style={styles.textStyle}>Total Payments</Text>
-                            <Text style={styles.textStyle}>${this.state.SupplierPaymentAmount}</Text>
+                            <Text style={styles.textStyle}>{this.state.SupplierPaymentAmount}</Text>
                         </View>
                         <View style={{ height: 2 }}></View> 
                         <View style={styles.horizontalView}>
                             <Text style={styles.textStyle}>Other Payments</Text>
-                            <Text style={styles.textStyle}>${this.state.OtherPaymentAmount}</Text>
+                            <Text style={styles.textStyle}>{this.state.OtherPaymentAmount}</Text>
                         </View>
                         <View style={{ alignItems: 'center', justifyContent: 'center', }}>
                                     {downArrow}
@@ -152,10 +160,11 @@ class ExpandableComp3 extends Component {
                                         return index.toString()
                                     }}
                                     renderItem={(data) => {
+                                        let amount = this.currencyFormat(data.item.PaymentAmount)
                                         return (<View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{data.item.VoucherName}</Text>
-                                                <Text style={styles.textStyle}>{data.item.PaymentAmount}</Text>
+                                                <Text style={styles.textStyle}>{amount}</Text>
                                             </View>
                                             <View style={{ height: 2 }}></View>
                                             <Divider style={{ backgroundColor: 'gray' }} />

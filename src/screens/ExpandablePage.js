@@ -17,21 +17,23 @@ class ExpandablePage extends Component {
         super(props);
         this.state = {
             collapsed: true,
-            revenue: []
+            revenue: [],
+            amount: 0,
+            otherAmount: 0
             //Sales: []
         }
         this.componentHeight = new Animated.Value(100)
         this.SI = this.props.SI
         this.OR = this.props.OR
-
     }
     componentDidMount() {
 
         this.getSalesData()
         this.getOtherRevenueAmount()
-
-
     }
+    currencyFormat =(num) => {
+        return '₹ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      }
     getSalesData = () => {
         let jsonData = this.SI
         let amount = 0
@@ -48,21 +50,25 @@ class ExpandablePage extends Component {
         let salesAmount = salesRevenue[length]
         if (salesAmount == undefined || salesAmount == null) {
             salesAmount = 0
-            console.log('executed if salesAmount', salesAmount)
             this.setState({ Exist: false, revenue: Sales, amount: salesAmount })
         } else {
-            this.setState({ Exist: true, revenue: Sales, amount: salesAmount, length: length + 1 });
+           let amo = this.currencyFormat(salesAmount)
+           console.log('Salesamount',salesAmount)
+            this.setState({ Exist: true, revenue: Sales, amount: amo, length: length + 1 });
         }
     }
     getOtherRevenueAmount = () => {
         let jsonData = this.OR
-        //console.log('in exapnd',jsonData)
-        let amount = 0
-        const revenueAmount = jsonData.map((o) => {
-            amount = parseInt(o.OB) - parseInt(o.CreditSum) + parseInt(o.DebitSum)
-            return amount
+        let arr = []
+        
+        let revenueAmount = jsonData.map((o) => {
+            let amount = parseInt(o.OB) - parseInt(o.CreditSum) + parseInt(o.DebitSum)
+            return arr.push(amount)
         })
-        this.setState({ otherAmount: revenueAmount });
+        const reducer = (acc, currentValue) => acc + currentValue;
+        let revenueAmo = arr.reduce(reducer);
+        let revenue = this.currencyFormat(revenueAmo)
+        this.setState({ otherAmount: revenue });
 
     }
 
@@ -79,7 +85,7 @@ class ExpandablePage extends Component {
     onExpand = () => {
         Animated.timing(this.componentHeight, {
             duration: 800,
-            toValue: this.state.length == 1 ? 150 : 250,
+            toValue: this.state.length == 1 ? 140 : 250,
         }).start();
     }
     onCollapse = () => {
@@ -94,6 +100,8 @@ class ExpandablePage extends Component {
 
     render() {
         const downArrow = <Feather name={this.state.collapsed ? 'chevron-down' : 'chevron-up'} size={15} style={{ padding: 0 }} />
+        const { amount, otherAmount, value } = this.state
+
         return (
             <Animated.View style={[styles.component]} >
 
@@ -110,12 +118,12 @@ class ExpandablePage extends Component {
                                 <View style={{ height: 2 }}></View>
                                 <View style={styles.horizontalView}>
                                     <Text style={styles.textStyle}>Sales Revenue</Text>
-                                    <Text style={styles.textStyle}>${this.state.amount}</Text>
+                                    <Text style={styles.textStyle}>{amount}</Text>
                                 </View>
                                 <View style={{ height: 2 }}></View>
                                 <View style={styles.horizontalView}>
                                     <Text style={styles.textStyle}>Other Revenue</Text>
-                                    <Text style={styles.textStyle}>${this.state.otherAmount}</Text>
+                                    <Text style={styles.textStyle}>{otherAmount}</Text>
                                 </View>
                                 <View style={{ alignItems: 'center', justifyContent: 'center', }}>
                                 {this.state.Exist ? downArrow : null}
@@ -133,7 +141,7 @@ class ExpandablePage extends Component {
                                     }}
                                     renderItem={(data) => {
                                         let amount = parseInt(data.item[1])
-                                        let cash = amount.toFixed(2)
+                                        let cash =  this.currencyFormat(amount)
                                         return (<View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{data.item[0]}</Text>

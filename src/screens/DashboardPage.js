@@ -52,7 +52,20 @@ class DashboardPage extends Component {
     }
   
     onRefresh = () => {
-        this.setState({refreshing: true})
+        this.setState({
+            refreshing: true,
+            loaded: false,
+            loaded2: false,
+            loaded3: false,
+            SalesIncome: [],
+            OtherRevenue: [],
+            CustomerReceipt: [],
+            OtherReceipt: [],
+            PurchaseExpense: [],
+            OtherExpense: [],
+            SupplierPayment: [],
+            OtherPayment: []
+        })
         this.getData()
     }
     getData = () => {
@@ -126,7 +139,6 @@ class DashboardPage extends Component {
             await axios.post(api.GET_DASHBOARD_DATA, {}, { headers: post })
                 .then(res => {
                     let response = res.data.requestedData
-                    console.log(response.salesIncomes)
                     let salesIncome = response.salesIncomes
                     let otherRevenue = response.otherIncomes
                     let customerReceipt = response.customerReciepts
@@ -149,7 +161,12 @@ class DashboardPage extends Component {
                         OtherPayment: otherPayment,
                         SalesCategory: salesCategoryWise,
                         StockCategory: stockCategoryWise,
+                        CashOnBank: 0,
+                        CashOnHand: 0,
+                        CashPayable: 0,
+                        CashReceivable: 0,
                         loaded2: true,
+                        loaded3: true,
                         initial: false,
                         refreshing: false
                     })
@@ -176,7 +193,6 @@ class DashboardPage extends Component {
                     let response = res.data.requestedData
                     this.setState({
                         LineData: response,
-                        loaded3: true
                     })
                 })
         } catch (error) {

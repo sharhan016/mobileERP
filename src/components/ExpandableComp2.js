@@ -15,20 +15,26 @@ class ExpandableComp2 extends Component {
         super(props);
         this.state = {
             collapsed: true,
-            receipt: []
+            receipt: [],
+            ReceiptAmount: 0,
+            OtherReceiptAmount: 0,
+            value: this.props.fixed
         }
         this.componentHeight = new Animated.Value(100)
 
         this.OR = this.props.OR
         this.CR = this.props.CR
-
+       // const value = this.props.fixed
+       const value = 2
     }
     componentDidMount() {
         //console.log('inside Exapndable page',this.data)
         this.getCustomerReceiptData()
         //console.log('LOOK Receipts Comp2',this.CR,this.OR)
-
     }
+    currencyFormat =(num) => {
+        return '₹ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      }
     getCustomerReceiptData = () => {
         let receipts = this.CR
         // let receipts = jsonData.requestedData.customerReciepts
@@ -63,7 +69,8 @@ class ExpandableComp2 extends Component {
             post.push(n.ReceiptAmount)
         })
         const reducer = (acc, currentValue) => acc + currentValue;
-        let recAmount = post.reduce(reducer);
+        let rec = post.reduce(reducer);
+        let recAmount = this.currencyFormat(rec)
         this.setState({ ReceiptAmount: recAmount })
         this.getOtherReceipts()
         //#TODO: merge similiar fields
@@ -76,12 +83,13 @@ class ExpandableComp2 extends Component {
             return arr.push(amount)
         })
         const reducer = (acc, currentValue) => acc + currentValue;
-        let otherAmount = arr.reduce(reducer);
+        let othe = arr.reduce(reducer);
+        let otherAmount = this.currencyFormat(othe)
         this.setState({ OtherReceiptAmount: otherAmount })
         //console.log(arr)
     }
 
-
+    
     toggleExpanded = () => {
         this.setState({ collapsed: !this.state.collapsed });
         !this.state.collapsed ? this.onCollapse() : this.onExpand()
@@ -104,6 +112,7 @@ class ExpandableComp2 extends Component {
     }
 
     render() {
+        const { ReceiptAmount, OtherReceiptAmount, value } = this.state
         const downArrow = <Feather name={this.state.collapsed ? 'chevron-down' : 'chevron-up'} size={15} style={{ padding: 0 }} />
         return (
             <Animated.View style={[styles.component]} >
@@ -120,12 +129,12 @@ class ExpandableComp2 extends Component {
                                 <View style={{ height: 2 }}></View>
                                 <View style={styles.horizontalView}>
                                     <Text style={styles.textStyle}>Customer Receipt</Text>
-                                    <Text style={styles.textStyle}>$ {this.state.ReceiptAmount}</Text>
+                                    <Text style={styles.textStyle}>{this.state.ReceiptAmount}</Text>
                                 </View>
                                 <View style={{ height: 2 }}></View>
                                 <View style={styles.horizontalView}>
                                     <Text style={styles.textStyle}>Other Receipt</Text>
-                                    <Text style={styles.textStyle}>$ {this.state.OtherReceiptAmount}</Text>
+                                    <Text style={styles.textStyle}>{this.state.OtherReceiptAmount}</Text>
                                 </View>
                                 <View style={{ alignItems: 'center', justifyContent: 'center', }}>
                                     {downArrow}
@@ -139,6 +148,7 @@ class ExpandableComp2 extends Component {
                                         return index.toString()
                                     }}
                                     renderItem={(data) => {
+                                        let amount = this.currencyFormat(data.item.ReceiptAmount)
                                         return (<View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{data.item.VoucherName}</Text>

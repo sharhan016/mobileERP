@@ -27,6 +27,10 @@ class ExpandableComp4 extends Component {
         this.getPurchaseExpense()
         this.getOtherExpenses()
     }
+    currencyFormat =(num) => {
+        console.log('num',num) 
+        return '₹ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      }
 
     getPurchaseExpense = () => {
         let jsonData = this.PE
@@ -44,6 +48,7 @@ class ExpandableComp4 extends Component {
         })
         let length = purchaseExpense.length - 1
         let expenseAmount = purchaseExpense[length]
+        console.log('typeof',typeof expenseAmount)
         this.setState({Exist: true, PExpense: Expense, PEamount: expenseAmount});
         console.log('There Exists data in expense')
         }
@@ -64,7 +69,8 @@ class ExpandableComp4 extends Component {
         })
         const reducer = (acc, currentValue) => acc + currentValue;
         let otherExpense = arr.reduce(reducer);
-        this.setState({OtherExpenseAmount: otherExpense})
+        let expenseOther = this.currencyFormat(otherExpense)
+        this.setState({OtherExpenseAmount: expenseOther})
         //console.log(arr)
     }
 
@@ -100,11 +106,12 @@ class ExpandableComp4 extends Component {
         //console.log('state in expense',this.state)
        const { PExpense } = this.state
        const Display = PExpense ? PExpense.map( (a, index) => {
+           let amount = this.currencyFormat(a[1])
         return(
             <View key={index}>
             <View style={styles.horizontalView}>
         <Text style={styles.textStyle}>{a[0]}</Text>
-        <Text style={styles.textStyle}>{a[1]}</Text>
+        <Text style={styles.textStyle}>{amount}</Text>
     </View>
     <View style={{ height: 2 }}></View>
     <Divider style={{ backgroundColor: 'gray' }} />
@@ -127,12 +134,12 @@ class ExpandableComp4 extends Component {
                         <View style={{ height: 2 }}></View>
                         <View style={styles.horizontalView}>
                             <Text style={styles.textStyle}>Total Expense</Text>
-                            <Text style={styles.textStyle}>$ {this.state.PEamount}</Text>
+                            <Text style={styles.textStyle}>₹ {this.state.PEamount}</Text>
                         </View>
                         <View style={{ height: 2 }}></View>
                         <View style={styles.horizontalView}>
                             <Text style={styles.textStyle}>Other Expense</Text>
-                            <Text style={styles.textStyle}>$ {this.state.OtherExpenseAmount}</Text>
+                            <Text style={styles.textStyle}> {this.state.OtherExpenseAmount}</Text>
                         </View>
                         <View style={{ alignItems: 'center', justifyContent: 'center', }}>
                                     {this.state.Exist ? downArrow : null}
