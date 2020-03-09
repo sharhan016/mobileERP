@@ -152,7 +152,7 @@ class ExpandableComp2 extends Component {
                                         return (<View>
                                             <View style={styles.horizontalView}>
                                                 <Text style={styles.textStyle}>{data.item.VoucherName}</Text>
-                                                <Text style={styles.textStyle}>{data.item.ReceiptAmount}</Text>
+                                                <Text style={styles.textStyle}>{amount}</Text>
                                             </View>
                                             <View style={{ height: 2 }}></View>
                                             <Divider style={{ backgroundColor: 'gray' }} />

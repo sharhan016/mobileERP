@@ -66,7 +66,7 @@ class LineChart2 extends Component {
                     item={item}
                     width={screenWidth}
                     height={220}
-                    yAxisLabel={'$'}
+                    yAxisLabel={'₹'}
                     chartConfig={{
                         backgroundColor: 'white',
                         backgroundGradientFrom: '#eff0f2',
