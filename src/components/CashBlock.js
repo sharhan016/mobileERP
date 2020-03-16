@@ -73,7 +73,7 @@ class CashBlock extends Component {
 
     getCashInHandAmount = () => {
         //let json = jsonData.requestedData.cashAccountBlock.CashOnHand_tillnow
-        let json = this.props.data
+        const json = this.props.data
         let arr = []
         const inHand = json.map( (n) => {
             let amount = parseInt(n.OB) - parseInt(n.CreditSum) + parseInt(n.DebitSum)
@@ -81,8 +81,8 @@ class CashBlock extends Component {
         })
         const reducer = (acc, currentValue ) => acc + currentValue
         let inHandAmount = arr.reduce(reducer);
-        let amount = inHandAmount.toFixed(2)
-        this.setState({json: json,InhandAmount: amount})
+        let IHamount = inHandAmount.toFixed(2)
+        this.setState({json: json,InhandAmount: IHamount})
     }
 
     render() {

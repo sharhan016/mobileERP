@@ -53,7 +53,7 @@ class ExpandablePage extends Component {
             this.setState({ Exist: false, revenue: Sales, amount: salesAmount })
         } else {
            let amo = this.currencyFormat(salesAmount)
-           console.log('Salesamount',salesAmount)
+          // console.log('Salesamount',salesAmount)
             this.setState({ Exist: true, revenue: Sales, amount: amo, length: length + 1 });
         }
     }

@@ -114,7 +114,6 @@ class ExpandableComp3 extends Component {
        //console.log('in render payments',this.state)
        const Display = this.state.supplierPayments.map( (a, index) => {
            let amount = this.currencyFormat(a.PaymentAmount)
-           console.log(amount)
         return(
             <ScrollView>
             <View key={index} style={styles.horizontalView}>

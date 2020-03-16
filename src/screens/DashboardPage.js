@@ -201,6 +201,7 @@ class DashboardPage extends Component {
     }
 
     render() {
+        //console.log(this.state.tokenID)
         const { loaded, loaded2, loaded3, initial, LineData, SalesIncome, OtherRevenue, CustomerReceipt, OtherReceipt, SupplierPayment, OtherPayment, PurchaseExpense, OtherExpense, SalesCategory, StockCategory, CashReceivable, CashPayable, CashOnBank, CashOnHand } = this.state
         const { loaderStyle, container, topNav, textStyle } = styles
         let receivableAmount = CashReceivable.toFixed(2)
@@ -241,7 +242,7 @@ class DashboardPage extends Component {
                     <View style={container}>
                         <View style={topNav}>
                             <RoundNav onPress={this.openReport} iconName='activity' heading='Reports' iconStyle={{ backgroundColor: '#c9dcfc', borderColor: '#4f91ff' }} />
-                            <RoundNav onPress={() => ToastAndroid.show('Work in progress', ToastAndroid.SHORT)} iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
+                            <RoundNav onPress={this.openCustomer} iconName='users' heading='Customers' iconStyle={{ backgroundColor: '#fbdebc', borderColor: '#d67f18' }} />
                             <RoundNav onPress={() => ToastAndroid.show('Work in progress', ToastAndroid.SHORT)} iconName='clipboard' heading='Suppliers' iconStyle={{ backgroundColor: '#f4dff2', borderColor: '#f0aae9' }} />
                         </View>
                         {/* <View style={topNav}>

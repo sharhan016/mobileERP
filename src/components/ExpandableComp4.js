@@ -28,7 +28,7 @@ class ExpandableComp4 extends Component {
         this.getOtherExpenses()
     }
     currencyFormat =(num) => {
-        console.log('num',num) 
+       // console.log('num',typeof num) 
         return '₹ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
       }
 
