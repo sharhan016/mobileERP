@@ -32,13 +32,24 @@ class CustomerPage extends Component {
         this.setState({
             data: jsonData.requestedData.SuppCustTransactionSummary
         })
-    }
+    } 
+    currencyFormat =(num) => {
+        return '₹ ' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      }
+    handleClick = (item) =>{
+        this.props.navigation.navigate('CustomerDetail', data={item})
+        console.log('I am clicked',item);
+      }
     renderName = (event) => {
         let initial = event.item.FullName.toUpperCase()
         let acronym = initial.split(/\s/).reduce((response, word) => response += word.slice(0, 1), '')
         let mod = acronym.slice(0, 2)
+        let amount = parseInt(event.item.PayableAmount)
+        let payableAmount = this.currencyFormat(amount)
         return (
-            <TouchableWithoutFeedback onPress={() => null}>
+            <TouchableWithoutFeedback onPress={ () => {
+                this.handleClick(event.item)
+            }}>
                 <View>
                     <ListItem
                         containerStyle={styles.listStyle}
@@ -47,7 +58,7 @@ class CustomerPage extends Component {
                         bottomDivider
                         roundAvatar
                         title={event.item.FullName}
-                        subtitle={'General'}
+                        subtitle={payableAmount}
                         leftAvatar={<UserAvatar size="50" name={mod} color="#000" />}
                     //chevron
                     />

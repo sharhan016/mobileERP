@@ -11,6 +11,7 @@ import DashboardPage from '../screens/DashboardPage';
 import CustomerPage from '../screens/CustomerPage';
 import AuthScreen from '../screens/AuthScreen';
 import ReportPage from '../screens/ReportPage';
+import CustomerDetailPage from '../screens/CustomerDetailPage';
 import Sidebar from '../components/SideBar';
 import LogOut from '../components/LogOut';
 import colors from "../config/colors";
@@ -34,7 +35,8 @@ const LoginStack = createStackNavigator({
 const DashStack = createStackNavigator({
     Dashboard: DashboardPage,
     Report: ReportPage,
-    Customer: CustomerPage
+    Customer: CustomerPage,
+    CustomerDetail: CustomerDetailPage
 });
 
 const AppDrawer = createDrawerNavigator({

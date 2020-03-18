@@ -256,7 +256,7 @@ class DashboardPage extends Component {
                         {initial ? initialLoader : null}
                         <View style={{ height: 40 }}></View>
 
-                        {loaded2 ? Report : null}
+                        {/* {loaded2 ? Report : null} */}
 
                         <View style={{ height: 20 }}></View>
                         

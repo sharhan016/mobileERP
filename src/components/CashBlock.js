@@ -73,7 +73,7 @@ class CashBlock extends Component {
 
     getCashInHandAmount = () => {
         //let json = jsonData.requestedData.cashAccountBlock.CashOnHand_tillnow
-        const json = this.props.data
+        let json = this.props.data
         let arr = []
         const inHand = json.map( (n) => {
             let amount = parseInt(n.OB) - parseInt(n.CreditSum) + parseInt(n.DebitSum)
